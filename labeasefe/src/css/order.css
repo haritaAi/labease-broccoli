@@ -1,0 +1,29 @@
+.order-container{
+   border: none;
+   
+}
+.mui-icon{
+    padding:0;
+}
+
+
+@media screen and (min-width:600px){
+    .order-container{
+        max-width: 100%;
+       
+    }
+}
+@media screen and (min-width : 980px) {
+    .order-container{
+       
+        
+      
+    }
+}
+@media screen and (min-width : 1200px) {
+    .order-container{
+        max-width: 70vw;       
+        margin : 0 auto;
+
+    }
+}

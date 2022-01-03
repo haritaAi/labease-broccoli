@@ -1,0 +1,39 @@
+.arialBlack {
+    font-family:'Arial Black';
+}
+.arial{
+    font-family: 'Arial';
+}
+.helvetica{
+    font-family: 'Helvetica';
+}
+.impact{
+    font-family: 'Impact';
+}
+.timesRoman{
+    font-family: 'Times New Roman';
+}
+.georgia{
+    font-family:'Georgia';
+}
+.bookAntiqua{
+    font-family:'Book Antiqua';
+}
+.palaLine{
+    font-family:'Palatino Linotype';
+}
+.courierNew{
+    font-family:'Courier New';
+}
+.garmond{
+    font-family: serif;
+}
+.lucida{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.verdana{
+    font-family:Verdana, sans-serif;
+}
+.tahoma{
+    font-family:'Segoe UI', Tahoma, Geneva, sans-serif;
+}

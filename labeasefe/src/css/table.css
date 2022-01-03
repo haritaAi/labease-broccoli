@@ -1,0 +1,48 @@
+/* table {
+   font-family:"Trebuchet MS",Arial, Helvetica, sans-serif;
+   border-collapse:collapse;
+   font-size: 1.5rem;
+   overflow-x: scroll;
+   
+}
+table td, table th{
+    border:1px solid #ddd;
+    padding: 8px;
+    column-width: 10vw;
+   
+}
+table th:first-child,td:first-child{
+   
+    column-width: 10px;
+}
+
+table tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+
+table th:nth-child(2), td:nth-child(2){
+   display: none;
+
+}
+table th:nth-child(7), td:nth-child(7){
+   display:none;
+
+}
+table th:last-child,td:last-child{
+   white-space: nowrap;
+}
+
+table tr:hover{
+    background-color: #ddd;
+}
+table th{  
+    padding-top:12px;
+    padding-bottom:12px;
+    text-align: center;
+    background-color: #32b1c7;
+    color:white;
+}
+@media screen and (min-width : 600px){
+
+
+} */

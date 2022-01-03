@@ -1,0 +1,107 @@
+
+.container-signin{
+    width : 90%;
+    margin : 0 auto;
+    height: fit-content;
+    padding: 2rem;
+    margin: 20vh auto;
+    color: var(--color-body-medium);
+    font-size : 1.6rem;
+    border : 1px solid grey;
+    border-radius: 2rem;
+}
+
+.icon-sign{  
+     margin : 0;
+     position: absolute;   
+     background-color: var(--color-body-medium);
+     padding:0.6rem 1rem;
+     border-radius: 1rem;
+     font-size: 2.4rem;
+    }
+.icon-sign.rotate{    
+    transform : rotate(90deg);
+}
+.form-group label {
+    font-weight: 600;
+}
+.form-group input{
+    width : 100%;  
+   color:var(--color-body-darker);  
+   border: 1px solid var(--color-body-medium);
+   border-radius: 1rem;   
+   outline: none;
+   margin-bottom: 1rem;
+   font-size: 1.6rem;
+}
+.error{
+    color : var(--color-secondary);
+    margin-top:-1rem;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+}
+
+
+.my-tab{
+    outline: none;
+    border:none;
+    padding :1rem 3rem;    
+    margin:0 0;
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+.company-container{
+    width:100vw;
+    /* height:40vh; */
+    border:none;  
+}
+.company-background{
+    background-color: rgb(225, 227, 228);
+    padding:5rem;  
+}
+.logo-image{
+    
+    max-width:20rem;
+    max-height:20rem;
+    
+}
+.title-text{
+    max-width:15vW;
+    margin:0 auto;
+}
+@media screen and (min-width :600px ){
+    .form-group input{
+        width : 100%;    
+
+}
+.container-signin{
+          width : 50%;  
+         
+  
+}
+
+}
+@media screen and (min-width:992px ) {
+    .form-group input{
+              width : 100%;    
+    
+    }
+    .container-signin{
+    width : 25%;  
+    margin: 15vh auto;
+               
+        
+    }
+    .company-container{
+        max-width:100%;
+        height:30vh;
+        border:none;        
+       
+    
+    }
+    .company-background{
+        background-color: rgb(225, 227, 228);
+        padding:5rem;  
+    }
+    
+}

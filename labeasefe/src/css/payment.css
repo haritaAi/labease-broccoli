@@ -1,0 +1,10 @@
+.payment-container{
+    max-width : '100%';
+}
+@media screen and (min-width : 900px) {
+    .payment-container{
+
+        max-width : '50%';
+        
+    }
+}

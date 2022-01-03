@@ -1,0 +1,62 @@
+.btn-tooth{
+    width : 2.5rem;
+    height: 2.5rem;
+    border-radius:  0.5rem;
+    border-width: 0;
+    outline-width: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    background-color: aqua;    
+    margin : 0.2rem 0.2rem 0.2rem 0.2rem;
+    
+}
+.divider-vt{
+    min-width : 0.5rem;
+    height : 5.5rem;
+    background-color: #fff;
+    border:1px solid #000; 
+}
+.divider-hz{
+    width : 100%;
+    min-height : 0.5rem;
+    background-color: #fff;
+    border:1px solid #000; 
+    margin: 0 auto;
+}
+.toothSelector{
+   
+    max-width: fit-content;
+    margin : 3rem auto;
+}  
+.tooth-container{
+    /* position:relative; */
+    /* top:25rem;
+    right:11rem; */
+    margin: auto auto;
+    width: fit-content;
+    font-size: 2rem;
+    transform: rotate(90deg);
+    overflow-y : scroll;
+    overflow-x: scroll;
+}
+.job-details{
+    display:none
+}    
+
+@media screen  and (min-width:600px) {
+    
+    .btn-tooth{
+         margin : 1rem 0.3rem 1rem 0.3rem;
+
+    }
+    .tooth-container{
+        /* position: static;         */
+        margin : 0 auto;
+        transform: rotate(0deg);
+        overflow: hidden; 
+    }
+    .job-details{
+        display:block;
+        height:100%;
+    }
+}

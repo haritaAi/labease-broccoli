@@ -1,0 +1,208 @@
+.container-form{
+    width : 100%;
+    padding:2rem;
+   /* background-color: var(--color-body-medium); */
+}
+.icon-sign.form-client{
+   background-color: var(--color-body-light);
+   color : var(--color-body-medium);
+   top : 1rem;
+}
+.form-div{    
+    padding : 0 3rem;
+    max-width:100%;
+}
+.heading{
+    font-size:2.6rem;
+    color: var(--color-body-heading);
+    font-weight: 600;
+}
+.form-group-heading{
+    font-size: 2.2rem;
+    color: var(--color-body-heading);
+    font-weight: 600;
+    padding: 1rem 1rem 1rem;
+    
+}
+.form-input{
+    display:flex;
+    border-radius: 1rem;
+    border : 2px solid var(--color-border); 
+    font-family: inherit; 
+    font-size: 2rem;
+    min-width:100%;
+    outline: none;
+    padding:1rem;
+    margin : 1rem 1rem 1rem 0;
+    background-color: var(--color-white);
+    
+}
+.client-form-group{
+    margin :0;
+    border:none;
+    outline: none;
+}
+.file-input{
+    outline: none;
+    border:none;
+    font-size: 2.2rem;    
+    display:flex;
+        
+}
+.form-field{
+    display:inline-flex;
+    flex-direction: row;
+    width : 100%;
+}
+.field-input{
+    width : 50%;
+    border-radius: 1rem;
+    border : 2px solid var(--color-border); 
+    font-family: inherit; 
+    font-size: 1.2rem;
+    padding : 1rem;
+    outline: none;
+    display : block;
+    margin : 2rem 0;
+}
+.multiline-input{
+    border:none;
+    font-family: inherit; 
+    font-size: 1.8rem;
+    flex-basis: 0.9;
+    margin : 2rem 1rem 1rem 0;
+    outline:none;
+    padding:0.5rem 0;
+    
+}
+.salutation{
+    display: inline;
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+}
+.location{
+    width : 100%;
+    border:2px solid var(--color-border);
+    outline: none;
+    font-size: 1.8rem;
+    color:var(--color-body-medium);
+    border-radius: 0.5rem;
+    margin : 1rem 0;
+}
+::placeholder {
+    color : var(--color-body-medium);  
+   
+  }
+  .desc-text{
+      font-size: 1.8rem;
+      color:var(--color-body-medium);
+      text-align: justify;
+  }
+.thumbnail {
+    width : 100px;
+    height : 100px;
+    object-fit: cover;
+    
+}
+
+/* TABS////////////////////////// */
+
+.tab-btn:hover{
+    background-color: rgb(247, 247, 247);
+    cursor: pointer;
+}
+
+ @media screen and (min-width : 600px){
+    .container-form{
+       max-width : 50%;
+       display:flex;
+       flex-direction: column;
+       justify-content: center;    
+       margin : 0 auto;
+    }
+    .multi-input-line{
+        display:flex;
+        flex-direction: row;
+        max-width: 100%;
+    }
+     .form-div{
+         max-width:100%;
+     }
+     .salutation{
+        display: inline;
+        border: none;
+        outline: none;
+        font-size: 1.8rem;
+    }
+    .form-input{        
+         font-size: 1.5rem;
+         padding:1rem;
+     }
+   .grid--1x2{
+     display: grid;
+     grid-template-columns: repeat(1fr,1fr);
+   }
+     .heading{
+        font-size: 2.2rem;    
+     }
+     .desc-text{
+        font-size: 1.4rem;
+    }  
+    .form-group-heading{
+        font-size: 1.5rem;
+        padding: 2rem 1rem 1.5rem;
+    }
+    .editor-textarea{
+        font-size: 1.5rem;
+        margin : 0 auto 2rem;
+    }
+    .icon-editor-compound{
+        width : 5rem;
+        margin:0.2rem;
+        font-size: 1.6rem;       
+        height : 3rem;
+        text-align: center;
+        padding : 0.5rem;
+    }
+    .icon-editor{
+        margin:0.2rem;
+        font-size: 1.6rem;
+        width : 3rem;
+        height : 3rem;
+        text-align: center;
+        padding : 0.5rem;       
+       
+    }   
+    .icon-upload{
+      
+        top:0;
+    }
+    .my-btn .form-button{
+       
+        margin : 0 auto;
+    }
+   
+ } 
+
+.button-dark{
+    max-width :fit-content;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background-color: var(--color-black);
+    color:var(--color-white);
+    margin : 2rem 0;
+    font-size: 1.5rem;
+}
+/* //Buttons/////////////////////// */
+.btn{
+    width : fit-content;
+    height:4rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--color-body);
+    color: var(--color-primary);
+}
+.my-tooltip {
+    font-size: 1.2rem;
+}

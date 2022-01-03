@@ -1,0 +1,212 @@
+[{
+  "_id": {
+    "$oid": "61a4e152c8c918846d6bc310"
+  },
+  "invoiceNo": "000001",
+  "invoiceDate": {
+    "$date": "2021-11-29T00:00:00Z"
+  },
+  "clientId": {
+    "$oid": "617a7e4a965efe9a705d41e2"
+  },
+  "client": "new Dentist",
+  "ordersList": [
+    "618e4486aa881f9282df4a47",
+    "619231c26d5a38ba095315ee"
+  ],
+  "amount": 48216,
+  "dueDate": {
+    "$date": "2021-12-01T00:00:00Z"
+  },
+  "paid": 0,
+  "balance": 48216,
+  "createdAt": {
+    "$date": "2021-11-29T14:18:58.094Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T17:26:33.280Z"
+  },
+  "__v": 0,
+  "cancelled": false,
+  "adjustmentNo": "",
+  "discount": 0
+},{
+  "_id": {
+    "$oid": "61a75199f6811de9c5af600e"
+  },
+  "invoiceNo": "000002",
+  "invoiceDate": {
+    "$date": "2021-12-01T10:41:16.775Z"
+  },
+  "clientId": {
+    "$oid": "617a87131274d67741c11377"
+  },
+  "client": "jamuna pai",
+  "ordersList": [
+    "618e0f25aa881f9282df4978"
+  ],
+  "amount": 26900,
+  "dueDate": {
+    "$date": "2021-12-01T10:41:16.775Z"
+  },
+  "paid": 0,
+  "balance": 26900,
+  "createdAt": {
+    "$date": "2021-12-01T10:42:33.330Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-01T10:42:33.330Z"
+  },
+  "__v": 0,
+  "cancelled": false
+},{
+  "_id": {
+    "$oid": "61aaf9dee3cee3db4def42ff"
+  },
+  "invoiceNo": "000003",
+  "invoiceDate": {
+    "$date": "2021-12-04T05:16:06.909Z"
+  },
+  "clientId": {
+    "$oid": "617a85dd1274d67741c1136d"
+  },
+  "client": " pankaj pansara",
+  "ordersList": [
+    "619232586d5a38ba095315f5",
+    "61aaf6dfe3cee3db4def42ef"
+  ],
+  "amount": 8200,
+  "dueDate": {
+    "$date": "2021-12-04T05:16:06.909Z"
+  },
+  "paid": 5000,
+  "balance": 3000,
+  "cancelled": false,
+  "createdAt": {
+    "$date": "2021-12-04T05:17:18.357Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T13:42:08.407Z"
+  },
+  "__v": 0,
+  "adjustmentNo": "000001",
+  "discount": 200
+},{
+  "_id": {
+    "$oid": "61aafe87e3cee3db4def432f"
+  },
+  "invoiceNo": "000004",
+  "invoiceDate": {
+    "$date": "2021-12-04T05:33:47.099Z"
+  },
+  "clientId": {
+    "$oid": "617a82951274d67741c11356"
+  },
+  "client": "shefali punam",
+  "ordersList": [
+    "619234196d5a38ba09531603"
+  ],
+  "amount": 16648,
+  "dueDate": {
+    "$date": "2021-12-04T05:33:47.099Z"
+  },
+  "paid": 0,
+  "balance": 2000,
+  "cancelled": false,
+  "createdAt": {
+    "$date": "2021-12-04T05:37:11.457Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-04T05:37:11.457Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61ab6ca4d397e0705088fab9"
+  },
+  "invoiceNo": "000005",
+  "invoiceDate": {
+    "$date": "2021-12-04T13:25:37.707Z"
+  },
+  "clientId": {
+    "$oid": "617a85dd1274d67741c1136d"
+  },
+  "client": "pankaj pansara",
+  "ordersList": [
+    "61ab1615e3cee3db4def4364"
+  ],
+  "amount": 8212,
+  "dueDate": {
+    "$date": "2021-12-04T13:25:37.707Z"
+  },
+  "paid": 0,
+  "balance": 8000,
+  "cancelled": false,
+  "createdAt": {
+    "$date": "2021-12-04T13:27:00.869Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-07T17:47:57.903Z"
+  },
+  "__v": 0,
+  "adjustmentNo": "000004",
+  "discount": 212
+},{
+  "_id": {
+    "$oid": "61ab6cb2d397e0705088fac8"
+  },
+  "invoiceNo": "000006",
+  "invoiceDate": {
+    "$date": "2021-12-04T13:27:01.179Z"
+  },
+  "clientId": {
+    "$oid": "617a85dd1274d67741c1136d"
+  },
+  "client": "pankaj pansara",
+  "ordersList": [
+    "61ab1615e3cee3db4def4364",
+    "61ab24112e3eb6ae2e23c975"
+  ],
+  "amount": 5700,
+  "dueDate": {
+    "$date": "2021-12-04T13:27:01.179Z"
+  },
+  "paid": 0,
+  "balance": 8200,
+  "createdAt": {
+    "$date": "2021-12-04T13:27:14.368Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-04T13:27:14.368Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61acc4f8845f08640cf702c0"
+  },
+  "invoiceNo": "000008",
+  "invoiceDate": {
+    "$date": "2021-12-05T13:55:27.171Z"
+  },
+  "clientId": {
+    "$oid": "617a87131274d67741c11377"
+  },
+  "client": "jamuna pai",
+  "ordersList": [
+    "61923054fa1dad1e7a079e6b"
+  ],
+  "amount": 5400,
+  "dueDate": {
+    "$date": "2021-12-05T13:55:27.171Z"
+  },
+  "paid": 0,
+  "balance": 10400,
+  "cancelled": false,
+  "createdAt": {
+    "$date": "2021-12-05T13:56:08.565Z"
+  },
+  "updatedAt": {
+    "$date": "2021-12-05T13:56:08.565Z"
+  },
+  "__v": 0
+}]

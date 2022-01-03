@@ -1,0 +1,19 @@
+.container-100-mdx60-xlx50{
+   max-width:100% ;
+   margin :0 2rem;
+}
+@media screen and (min-width:926px){
+ 
+    .container-100-mdx60-xlx50{
+            max-width:60% ;
+        margin : 0 auto;
+
+     }
+}
+@media screen and (min-width:1200px){
+ 
+    .container-100-mdx60-xlx50{
+        max-width:50% ;
+        margin : 0 auto;
+     }
+}
