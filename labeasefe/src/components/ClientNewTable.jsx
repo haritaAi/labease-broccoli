@@ -43,13 +43,13 @@ const useStyles = makeStyles({
 
 
 
-const ClientNewTable = ({onEditClient,onOrderClient,onPaymentClient}) =>  {
+const ClientNewTable = ({onEditClient,onOrderClient,onPaymentClient,clients}) =>  {
 
 
   const classes = useStyles();
   
 
-  const {clients,setClientSelected} = useContext(ClientContext)
+  const {setClientSelected} = useContext(ClientContext)
 
    
     const columns = [
@@ -73,69 +73,9 @@ const ClientNewTable = ({onEditClient,onOrderClient,onPaymentClient}) =>  {
                                         setClientSelected(rowData)
                                       }}
                                      ><Tooltip title = {<div style = {{ fontSize : '1.4rem', padding:'0.5rem' }}>Edit Client</div>}>
-        <EditIcon sx={{fontSize : 30}}/></Tooltip></Link>}
+        <EditIcon sx={{fontSize : 24}}/></Tooltip></Link>}
         
     ]
-
-   const clientDetail = (rowData) => {
-
-    const {name,emailPrimary,phoneO,phoneM,phoneR,address1,address2,city,state} = rowData
-
-     return (
-       <div>
-             
-             
-                                        <div className = 'row'>
-                                            <div className="col-3">
-                                              
-                                            </div>
-                                            <div className="col">
-                                            <strong>Client Detail</strong>
-                                            <div className="row">
-                                                <div className="col-3">Name :</div>
-                                                <div className="col-5">{name}</div>
-                                            </div>
-                                            
-                                            <div className="row">
-                                                <div className="col-3">email : </div>
-                                                <div className="col-5">{emailPrimary}</div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-3">Office :</div>
-                                                <div className="col-5">{phoneO}</div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-3">Mobile :</div>
-                                                <div className="col-5">{phoneM}</div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-3">Residence :</div>
-                                                <div className="col-5">{phoneR}</div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-3">Address : </div>
-                                                <div className="col-5">{address1}</div>
-                                            </div>    
-                                            <div className="row">
-                                                <div className="col-3"> </div>
-                                                <div className="col-5">{address2}</div>
-                                            </div>       
-                                            <div className="row">
-                                                <div className="col-3">Location : </div>
-                                                <div className="col-5">{city}</div>
-                                            </div>    
-                                            <div className="row">
-                                                <div className="col-3">State : </div>
-                                                <div className="col-5">{state}</div>
-                                            </div> 
-                                                
-                                            </div>
-                                                
-                                                    
-                                        </div>     
-       </div>
-     )
-   }
 
 
 
@@ -173,7 +113,7 @@ const ClientNewTable = ({onEditClient,onOrderClient,onPaymentClient}) =>  {
                       }}
                        actions = {[
                            {icon:()=><Tooltip title = {<div style = {{ fontSize : '1.4rem', padding:'0.5rem' }}>Create Order</div>}>
-                                      <FlipToFrontRoundedIcon sx={{fontSize : 30}} /></Tooltip>,
+                                      <FlipToFrontRoundedIcon  sx = {{fontSize : 30}} /></Tooltip>,
                              onClick:(e,data)=>{  
                                                      onOrderClient(data)
                                                    
@@ -182,7 +122,7 @@ const ClientNewTable = ({onEditClient,onOrderClient,onPaymentClient}) =>  {
                           
                             {
                               icon:()=><Tooltip title = {<div style = {{ fontSize : '1.4rem', padding:'0.5rem' }}>New Payment</div>}>
-                                         <MoneyIcon sx={{fontSize : 25}}/></Tooltip>,
+                                         <MoneyIcon sx = {{fontSize : 30}}/></Tooltip>,
                               onClick:(e,data)=>{ 
                                                    onPaymentClient(data)
                                                   }

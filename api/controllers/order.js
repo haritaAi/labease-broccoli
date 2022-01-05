@@ -78,7 +78,7 @@ exports.getAllOrders = (req,res) => {
 
     Order.find()
           .sort([[sortBy,"asc"]]) 
-          .populate('client')
+          .populate('clientId')
           .exec((err,order) => {
               if(err)return res.status(400).json({message : "Failed to fetch data"})
 

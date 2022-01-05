@@ -212,7 +212,7 @@ const fetchStaff = async () => {
            setTimeout(()=>setAlert(false),2000)
         }
         else {
-            // console.log("ADJUSTMENTS IN ROUTE :",data)
+            
             setStaff(data)
         }
     })
@@ -244,8 +244,8 @@ const updateDB = () => {
 }
     
 useEffect(()=>{
-    updateDB()
-    setInterval(updateDB,120000)
+    // updateDB()
+    // setInterval(updateDB,120000)
 },[])
 
 

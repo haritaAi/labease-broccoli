@@ -11,6 +11,7 @@ import UserContext from '../context/UserContext';
 import { makeStyles } from "@material-ui/core/styles";
 import ClientContext from '../context/ClientContext';
 import SearchComponent from './searchComponent';
+import {getOrders,getClients} from '../admin/clientApi'
 
 const useStyles = makeStyles({
     root: {
@@ -44,13 +45,18 @@ const OrderTable = (props)=> {
 
    const classes = useStyles();
 
-  const {orders,fetchOrders,setOrderSelected} = useContext(OrderContext)
-  const {clients,setClientSelected} = useContext(ClientContext)
+  const {setOrderSelected} = useContext(OrderContext)
+  const {setClientSelected} = useContext(ClientContext)
+  const [orders,setOrders] = useState([])
+  const [clients,setClients] = useState([])
   const [data,setData] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const {user,token} = useContext(UserContext)
-  
-  const [selectRows,setSelectedRows] = useState(null)
+  const [values,setValues] = useState({
+    error:'',
+    loading:false
+  })
+  const [selectRows,setSelectedRows] = useState([])
  
  const [message,setMessage] = useState('')
  const [alert,setAlert] = useState(false)
@@ -63,10 +69,11 @@ const handleUpdate = (filtered) => {
 }
 
  const handleStatus = (e) => {
-  
+     console.log("Updating assign To")
     let val = e.target.value
 
     let success = 0;
+    
     if(selectRows.length>0){
          
           selectRows.forEach(order =>{
@@ -172,17 +179,12 @@ const handleAssignTo = e => {
 
    }
 }
-const getClientDetails = (clientId) => {
-        
-    let clientdetail = clients.filter(client => client._id === clientId)
-    if(clientdetail.length>0)  return(clientdetail[0])
-          else window.alert("No client found")
-}
+
 const handleRepeatOrderSearch = ()=>{
     let newData = orders.filter(order => order.workType==='repeat')
     
     setFilteredData(newData)
-    setData(newData)
+    
 }
 const handleRepairOrderSearch = ()=>{
   let newData = orders.filter(order => order.workType === 'repair')
@@ -206,15 +208,43 @@ const handleInvoiceFilter = event => {
   setFilteredData(newData)
   
   } 
-  else setData(orders)
+  else setFilteredData(orders)
   
 }
 useEffect(()=>{
-  setOrderSelected(null)
-  setFilteredData(orders)
-  setData(orders)
+  (async ()=> {
+    setOrderSelected(null) 
+    setValues({loading:true})
+    const client  = await getClients(user._id,token)
+    const order = await getOrders(user._id,token)       
+    setClients(client)
+    setOrders(order)  
+    setData(order)
+    setFilteredData(order)
+    setValues({loading:false})      
+    
+})()
+},[])
 
-},[orders])
+const fetchOrders = async () => {
+  await getOrders(user._id,token)
+  .then(data => {
+      if(data.error){
+      setMessage("Error fetching data")
+      setAlert(true)
+      setTimeout(()=>setAlert(false),2000)
+      }
+      else {
+          setOrders(data)
+          // console.log("ORDERS RECEIVED IN ROUTES :",data)
+      }
+  })
+  .catch(err => { 
+                      setMessage("Error fetching data")
+                      setAlert(true)
+                      setTimeout(()=>setAlert(false),2000)
+                      })
+}
 
 
   const COLUMNS = [
@@ -236,12 +266,9 @@ useEffect(()=>{
                             render:rowData => <Link to = '/client/clientprofile'  
                                                     style = {{textDecoration :'none'}} 
                                                     className = {classes.tableCell}
-                                                    onClick = {()=>
-                                                                  {   let clientSelect = null;
-                                                                        clientSelect =   getClientDetails(rowData.clientId)
-                                                                      if(clientSelect) setClientSelected(clientSelect)
-                                                                      }
-                            }>{(rowData.client).toUpperCase()}</Link>},
+                                                    onClick = {()=> setClientSelected(rowData.clientId)}>
+                                                         {(rowData.client).toUpperCase()}
+                                                         </Link>},
        {title:'Patient',field : 'patient',maxWidth:'7rem',cellStyle : { fontSize :'1.6rem',border:'1px solid #5c5c5c'}  }  ,                   
       
       {titile : 'Products',field : 'products',cellStyle : { fontSize :'1.6rem',border:'1px solid #5c5c5c'},
@@ -317,11 +344,13 @@ const orderDetail = (rowData) => {
     )
 }
 
+const {error,loading} = values
 
     return (
         <div className = 'container'>
           <div>
             <div>
+              {loading && <div className='fs-3 text-center text-secondary'>Loading...</div>}
               <div className='fs-4'>Compare Date</div>
               <select className='fs-4' onChange = {(e)=> {                            
                             setSearchVal(e.target.value)
@@ -351,10 +380,10 @@ const orderDetail = (rowData) => {
                                     
                                     <div style = {{padding:'10px 0px'}}>
                                        <select className="bg-body border border-dark rounded outline-0 p-2 mx-3 col-6 col-sm-2 fs-4"
-                                                name='status'                                             
+                                                name='status'                                                                                    
                                                 onChange={handleStatus}
                                                 >
-                                            <option selected>Mark as</option>
+                                            <option >Mark as</option>
                                             <option value = "New">New</option>
                                             <option value = "In Production">In Production</option>
                                             <option value = "Complete">Complete</option>
@@ -368,7 +397,7 @@ const orderDetail = (rowData) => {
                                         <select className="bg-body border border-dark rounded outline-0 p-2 fs-4 mx-3 my-2 col-6 col-sm-2"
                                                 onChange = {handleDepartment}  
                                                 >
-                                            <option selected>Move To</option>
+                                            <option >Move To</option>
                                             <option value = "OUTBOX">OUTBOX</option>
                                             <option value = "ACRYLIC">ACRYLIC</option>
                                             <option value = "ADMIN">ADMIN</option>
@@ -385,7 +414,7 @@ const orderDetail = (rowData) => {
                                             <select className="bg-body border border-dark rounded outline-0 p-2 fs-4 mx-3 my-2 col-6 col-sm-2"
                                                 onChange = {handleAssignTo}  
                                                 >
-                                            <option selected>Assign To</option>
+                                            <option >Assign To</option>
                                             <option value = "BHARAT BHAI">BHARAT BHAI</option>
                                             <option value = "CHANDRAKANT BHAI">CHANDRAKANT BHAI</option>
                                             <option value = "Courier">Courier</option>
@@ -419,7 +448,7 @@ const orderDetail = (rowData) => {
                                              name= 'invoice'
                                              onChange = {handleInvoiceFilter}  
                                              >
-                                               <option selected>All</option>
+                                               <option >All</option>
                                                <option value = {true}>Invoiced</option>
                                                <option value = {false}>Not Invoiced</option>
                                      </select>

@@ -14,9 +14,12 @@
     padding:0.2rem;  
 }
 .logo-img{
-    max-width:22vw;
-    padding: 1rem;
-    max-height: 7rem;
+    width:100%;
+    padding-right: 1rem;
+   
+}
+.logo-container{
+    max-width:15rem;
 }
 .icon-cart{
     width : 4.5rem;
@@ -117,7 +120,7 @@
     align-items:center;
     margin-top :1rem;
  } 
-@media screen and (min-width:600px){
+@media screen and (min-width:880px){
     .menu{
         flex-direction:row-reverse ;
         align-items: center;
@@ -148,13 +151,17 @@
      .nav-link{
         text-decoration: none;
         font-size:  1.6rem;
-        margin : 1rem 1rem;
+        margin : 0.5rem 0.5rem;
     }
     .nav__toggler{
         display : none;
     }
+    .logo-container{
+        width : 25rem;
+    }
     .logo-img{
-        max-width: 14vw;
+        width:100%;
+        padding-right: 2rem;
     }
     .menu_list_container{
         flex-direction: row;

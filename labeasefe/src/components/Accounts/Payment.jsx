@@ -1,14 +1,15 @@
 import React,{useState,useContext,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
-import {compose,pipe} from 'lodash/fp'
 import Menu from '../menu';
 import ClientContext from '../../context/ClientContext';
-import OrderContext from '../../context/OrderContext';
+
 import UserContext from '../../context/UserContext';
 import InvoiceContext from '../../context/InvoiceContext'
 
 import '../../css/payment.css'
-import {createReceipt, getInvoices, getInvoicesByClientId,getNextReceiptSequence, updateClient, updateInvoice} from '../../admin/clientApi'
+import {createReceipt,getClients, getInvoices,
+       getNextReceiptSequence,
+       getOrders, updateClient, updateInvoice} from '../../admin/clientApi'
 import Modal from '../Modal'
 import '../../css/orderDetail.css'
 import PaymentInvoiceTable from './Receipt/PaymentInvoiceTable';
@@ -24,10 +25,13 @@ const  Payment = (props) =>  {
 
     const history = useHistory()
     const {user,token} = useContext(UserContext)
-    const {clients,clientSelected,setClientSelected,fetchClients} = useContext(ClientContext)
-    const {orders} = useContext(OrderContext)
-    const {setInvoiceSelected,fetchInvoices} = useContext(InvoiceContext)
-    const {receiptSelected,setReceiptSelected} = useContext(ReceiptContext)
+    const {clientSelected,setClientSelected} = useContext(ClientContext)
+    // const {orders} = useContext(OrderContext)
+    const [clients,setClients] = useState([])
+    const [orders,setOrders] = useState([])
+    const [invoices,setInvoices] = useState([]) 
+    const {setInvoiceSelected} = useContext(InvoiceContext)
+    const {receiptSelected} = useContext(ReceiptContext)
     const [clientInvoices,setClientInvoices] = useState([])
     const [showModal,setShowModal] = useState(false)
     const [receiptNumber,setReceiptNumber] = useState(null)
@@ -35,11 +39,15 @@ const  Payment = (props) =>  {
     const [message,setMessage] = useState('')
     const [alert,setAlert] = useState(false)
     const [totalAppliedInvoices,setTotalAppliedInvoices] = useState([])
-    const [totalAppliedAmount,setTotalAppliedAmount] = useState(0)
+    // const [totalAppliedAmount,setTotalAppliedAmount] = useState(0)
     const [balanceAmount,setBalanceAmount] = useState(0)
     const [drcr,setdrcr] = useState(false)
+    const [datafetching,setDatafetching] = useState({
+        error : '',
+        loading:false
+    })
      let temp = []
-
+const {error,loading} = datafetching
 
  const [values,setValues] = useState({
      amount:0,
@@ -57,8 +65,8 @@ const  Payment = (props) =>  {
 const populateClientData = () => {
     if(clientSelected){
 
-      let clientOrders =   orders.filter(order => order.clientId === clientSelected._id)
-         console.log("Orders belongnf to  this client are:",clientOrders)
+      let clientOrders =   orders.filter(order => order.clientId._id === clientSelected._id)
+        
     }
 }
 
@@ -137,20 +145,20 @@ const handleReceiptSave = () => {
 
       //Update Invoices as per the applied amount for each
       let invoiceList = createInvoiceList()
-      console.log("Invoice List :",invoiceList)
+    
       totalAppliedInvoices.forEach(invoice => {
           let tempInvoice = {...invoice}
               tempInvoice.paid = parseInt(tempInvoice.applied)
               tempInvoice.balance = parseInt(tempInvoice.amount)-tempInvoice.paid       
               delete tempInvoice.applied     
   
-         console.log("Invoice to be update :",tempInvoice)
+         
           updateInvoice(user._id,token,tempInvoice)
              .then(data => {
                  if(data.error){
                   window.alert("Error while saving invoice update")
                  }
-                 else fetchInvoices()
+                //  else fetchInvoices()
              })
              .catch(err => window.alert("Error while saving invoice update"))
        })
@@ -162,7 +170,7 @@ const handleReceiptSave = () => {
         updateClient(user._id,token,{...clientSelected,balance : newBalance})
             .then(data => {
                 if(data.error){   window.alert("Error while saving client data") }  
-                else fetchClients()              
+                // else fetchClients()              
             })
             .catch(err => window.alert("Error while saving client data"))
 
@@ -170,8 +178,7 @@ const handleReceiptSave = () => {
     
      //CREATE RECEIPT
     
-      console.log("Receipt values to save :",{...values,receiptNo : receiptNumber,amount,invoicesApplied:invoiceList  })
-      console.log("Client balance after receipt :",newBalance)
+     
      
             createReceipt(user._id,token,{...values,receiptNo : receiptNumber,amount,invoicesApplied:invoiceList })
             .then(data => {
@@ -192,14 +199,14 @@ const handleReceiptSave = () => {
 }  
   
 //    const {name} = clientSelected
-const {amount,paymentDate,receiptNo,paymentMode,paidtoAc,chequeNo,notes,invoicesApplied} = values
+const {amount,paymentDate,paymentMode,paidtoAc,chequeNo,notes} = values
   
  
   
 const handleChange = name => event => {
 
     setValues({...values,[name]:event.target.value})
-    console.log(`Property : ${name} , value : ${event.target.value} ` )
+  
   }
   
 const getLastInvoice = (invoiceList) => {
@@ -239,7 +246,7 @@ const onSelectClient = event =>{
                    if(data.length > 0){
                        let newData =   data.filter(invoice => (invoice.clientId === selectedClientId )&& (invoice.balance >= 0))
                        
-                       console.log("Invoice data :",newData)
+                     
                        setClientInvoices(newData)
                     }
                }
@@ -290,8 +297,7 @@ const getReceiptCode = async () => {
         .then(data => {          
             
             setReceiptNumber(convertToSequnceString(data.sequence_val))  
-            console.log("RECEIPT NO :",data.sequence_val)
-        })
+                   })
         .catch(err => {
             setMessage("Error in sequence")
             setAlert(true)
@@ -300,6 +306,16 @@ const getReceiptCode = async () => {
 }
   
 useEffect(()=>{
+    (async ()=> {
+        setDatafetching({error:'',loading : true})
+        const client = await getClients(user._id,token)
+        const order = await getOrders(user._id,token)
+        const invoice = getInvoices(user._id,token)
+        setClients(client)
+        setOrders(order)
+        setInvoices(invoice)
+        setDatafetching({error : '',loading:false})
+    })()
     if(receiptSelected){
     //    setClientSelected(receiptSelected.client)
        setUpdate(true)
@@ -327,7 +343,7 @@ const calculateAmountApplied = () => {
     let totalAmount = 0
     if(totalAppliedInvoices.length > 0)
             totalAppliedInvoices.forEach(invoice => invoice.applied? totalAmount += parseInt(invoice.applied): null )
-    console.log("Total Amount Applied : ",totalAmount)
+    
     return totalAmount
 }
 const handleCashApplied = (paidAmount,index) => {
@@ -347,7 +363,7 @@ const handleCashApplied = (paidAmount,index) => {
 
 const calculateClientBalance = () => {
     let newBalance = 0
-   console.log("DRCR VALUE FOR THID CLIENT : ",drcr)
+ 
     if(drcr){   //if client has credit balance 
      }
     else {
@@ -357,14 +373,14 @@ const calculateClientBalance = () => {
             if(newBalance > 0)setdrcr(true) // excess amount is credited
             setBalanceAmount(newBalance)
             
-           console.log("NEw client  Balance1111 : ",newBalance)
+           
            return newBalance     
         }
         else { // if paying less than the outstanding amount
             newBalance = parseInt(balanceAmount) - parseInt(amountApplied)
             if(newBalance > 0 ) setdrcr(false) 
             setBalanceAmount(newBalance) 
-           console.log("NEw client  Balance : ",newBalance)     
+              
            return newBalance     
 
         }
@@ -464,7 +480,7 @@ const receiptForm = () => {
             <div className="col ">
                    <div>Payment Date</div>
                    {!update && <input type="date"
-                          value = {paymentDate}                                                    //    defaultValue = {new Date().toDateString()} 
+                          value = {paymentDate}                 //    defaultValue = {new Date().toDateString()} 
                           onChange = {handleChange('paymentDate')}                                  
                           />}
                      {update && <div className = 'border border-dark text-right'>{getFormatDate(paymentDate)}</div>}     
@@ -596,6 +612,7 @@ const receiptForm = () => {
    return (
         <div className = ''>
             <Menu/>
+            {loading && <div className='fs-3 text-center text-secondary'>Loading...</div>}
             {alert && <div className = 'fs-4 text-red'>{message}</div>}
             {showModal && <Modal title = 'Payment Settlemant' onClose = {handleModalClose}>
                             {invoiceListModal()}

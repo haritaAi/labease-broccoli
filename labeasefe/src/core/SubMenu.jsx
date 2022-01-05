@@ -12,7 +12,7 @@ const currentTab = (history,path) => {
 }
 
 
-const  SubMenu = (history,path) => {
+const  SubMenu = ({history,path}) => {
     return (
             <>
            {isAuthenticated() && isAuthenticated().user.role ===1 && 

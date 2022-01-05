@@ -1,35 +1,79 @@
-import React,{useEffect, useState,useContext} from 'react';
+import React,{useEffect, useState} from 'react';
 import {Link} from 'react-router-dom'
 import ReceiptTable from './ReceiptTable';
 import Menu from '../../../components/menu'
 import {getAllReceipts} from '../../../admin/clientApi'
-import ReceiptContext from '../../../context/ReceiptContext';
+// import ReceiptContext from '../../../context/ReceiptContext';
 import SubMenuAccounts from '../SubMenuAccounts';
 
 const  Receipt = (props)=> {
   
-   const {receipts,setReceiptSelected,receiptSelected,fetchReceipts} = useContext(ReceiptContext) 
+//    const {setReceiptSelected,receiptSelecteds} = useContext(ReceiptContext) 
    
    const [currentTab,setCurrentTab] = useState(1)
+   
    const [receiptsCancelled,setReceiptsCancelled] = useState([])
    const [allReceipts,setAllReceipts] = useState([])
+   const [receipts,setReceipts] = useState([])
+   const [values,setValues] = useState({
+    error :'',
+    loading:false
+})
+
+const {error,loading} = values
+
 const handleReceiptSelect = () => {
 
 }
 const findAllReceipts = ()=>{
-    let data = receipts.filter(receipt => receipt.cancelled === false)
-    setAllReceipts(data)
+    if(receipts.length>0){
+        let data = receipts.filter(receipt => receipt.cancelled === false)
+        setAllReceipts(data)
+    }
+   
 }
 
 const findCancelledReceipts = () => {
    let data = receipts.filter(receipt => receipt.cancelled === true)  
    setReceiptsCancelled(data) 
 }
+const fetchReceipts = async () => {
+    setValues({error : '',loading:true})
+
+    await getAllReceipts()
+    .then(data => {
+        if(data.error){
+            setValues({error : data.error,loading:false})
+
+        }
+        else {
+            // console.log("RECEIPTS IN ROUTE :",data)
+            setReceipts(data)
+            setValues({error : '',loading:false})
+            findAllReceipts()
+            findCancelledReceipts()
+             
+        }
+    })
+    .catch(error =>{
+        setValues({error : error,loading:false})
+
+    } 
+       )
+}
+
 useEffect(()=>{
-   findAllReceipts()
-   findCancelledReceipts()
+    (async () => {
+        setValues({loading:true})
+        
+     const receipt =  await getAllReceipts()
+     setReceipts(receipt)
+     findAllReceipts()
+     findCancelledReceipts()
+     setValues({loading:false})
+    })()
   
-},[])
+},[receipts])
 
 
 
@@ -37,6 +81,7 @@ useEffect(()=>{
         <div>
             <Menu/>
             <SubMenuAccounts  />
+            {loading && <div className='fs-3 text-center text-secondary'>Loading...</div>}
             
             <div className = 'container-fluid'>
                 <div className="row">

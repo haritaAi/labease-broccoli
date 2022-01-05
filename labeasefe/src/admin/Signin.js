@@ -3,7 +3,7 @@ import {Link,Redirect} from 'react-router-dom';
 import {signin,authenticate,isAuthenticated} from '../auth';
 import Menu from '../components/menu';
 import '../icons/FontawesomeIcons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import TextError from '../components/TextError';
 
 
@@ -21,7 +21,7 @@ const Signin = () => {
          const [errorAlert,setErrorAlert] = useState(false)
 
     const {email,password,error,loading,didRedirect} = values;
-    const {user} = isAuthenticated();
+    
     
     const handleChange = name => event =>  {
         setValues({...values, error : false, [name] : event.target.value});
@@ -41,8 +41,8 @@ const Signin = () => {
                       setTimeout(()=>setErrorAlert(false),2000);
                   } 
                   else authenticate(data,() => {
-                      console.log("Signed in successfully");
-                      setValues({...values,didRedirect : true});
+                      
+                      setValues({...values,didRedirect : true,loading:false});
                       
                   });
               })
@@ -52,7 +52,8 @@ const Signin = () => {
                                setErrorAlert(true)
                                setTimeout(()=>setErrorAlert(false),2000);
                            }          
-                           console.log(err)
+                           setValues({error: err, loading : false})
+                           window.alert("Error singin in ..")
                         });
     };
     const performRedirect = () => {
@@ -100,7 +101,8 @@ const signInForm = () => {
     return ( 
         <div>
            <Menu/>
-           
+            {loading &&  <div className='fs-3 text-center'>Loading...</div>}
+            {error && <div className = 'fs-3 text-center text-danger'>User name or password does not match</div>}
             {signInForm()}   
             {performRedirect()}  
             {/* <p className = "text-center ">Not registered yet! <Link to = "/signup">Sign Up</Link> now!! </p> */}

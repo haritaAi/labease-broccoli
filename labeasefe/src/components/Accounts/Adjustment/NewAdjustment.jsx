@@ -4,17 +4,19 @@ import ClientContext from '../../../context/ClientContext'
 import InvoiceContext from '../../../context/InvoiceContext'
 import UserContext from '../../../context/UserContext'
 import Popover from '@mui/material/Popover';
+import {getOrders,getClients,getInvoices} from '../../../admin/clientApi'
 
 
 const  NewAdjustment = ({ onAdjustmentCancel}) =>  {
 
  
-  const {clients,setClientSelected,clientSelected} = useContext(ClientContext)
+  const {setClientSelected,clientSelected} = useContext(ClientContext)
   const {user,token} = useContext(UserContext)
-  const {invoices} = useContext(InvoiceContext)
+//   const {invoices} = useContext(InvoiceContext)
   const [currentInvoices,setCurrentInvoices] = useState([])
   const [invoiceSelected,setInvoiceSelected] = useState(null)
-  
+  const [clients,setClients] = useState([])
+  const [invoices,setInvoices] = useState([])
   const [adjustmentNumber,setAdjustmentNumber] = useState()
   const [message,setMessage]  = useState('')
   const [alert,setAlert] = useState(false)
@@ -32,7 +34,12 @@ const  NewAdjustment = ({ onAdjustmentCancel}) =>  {
      invoice : '',
           
   })
+  const [datafetching,setDatafetching] = useState({
+      error:'',
+      loading:false
+  })
 
+const {error,loading} = datafetching
 
 const handleChange = name =>event =>{
        
@@ -178,7 +185,7 @@ const getAdjustmentCode = async () => {
     await getNextAdjustmentSequence()
         .then(data => {           
             setAdjustmentNumber(convertToSequnceString(data.sequence_val))  
-            console.log("Adjustment Number :",data.sequence_val)
+            // console.log("Adjustment Number :",data.sequence_val)
         })
         .catch(err => {
             setMessage("Error in sequence")
@@ -190,14 +197,24 @@ const getAdjustmentCode = async () => {
 
 
 useEffect(()=>{
-    
-    getAdjustmentCode()
-    setValues({...values,adjNo:adjustmentNumber})
+    (async ()=> {
+        
+        setValues({loading:true})
+        const client  = await getClients(user._id,token)         
+        const invoice = await getInvoices(user._id,token)    
+        setClients(client)         
+        setInvoices(invoice)       
+        setDatafetching({loading:false})      
+        
+        getAdjustmentCode()
+        setValues({...values,adjNo:adjustmentNumber})
+    })()
 },[adjustmentNumber])
 
 
     return (
         <div >
+              {loading && <div className='fs-3 text-center text-secondary'>Loading...</div>}
             
          {!clientSelected &&  <div className = 'my-5'>
             <select className = 'fs-4'

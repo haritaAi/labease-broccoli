@@ -1,14 +1,11 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 const EmailButton = ({email}) => {
 
 
 
-    useEffect(()=>{
-        // 
-          console.log("refreshed")
-    },[])
+    
     
     return (
         <div className="btn btn-warning fs-4 mx-1 my-1 px-3" style = {{width : '10rem'}} onClick = {()=> 

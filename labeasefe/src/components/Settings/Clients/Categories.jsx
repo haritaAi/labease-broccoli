@@ -6,7 +6,7 @@ import UserContext from '../../../context/UserContext'
 const Categories = (props) => {
     
     const {user,token} = useContext(UserContext)   
-    const [update,setUpdate] = useState(false)
+    
      
     const [categories,setCategories] = useState([])
     const [values,setValues] = useState({

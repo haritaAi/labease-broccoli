@@ -6,13 +6,15 @@ import ClientContext  from '../../context/ClientContext'
 import OrderContext from '../../context/OrderContext'
 import MaterialTable from 'material-table';
 import {  TablePagination, Tooltip } from '@material-ui/core';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 import EditIcon from '@mui/icons-material/Edit';
 import MoneyIcon from '@mui/icons-material/Money';
 import tableIcons from '../../icons/MaterialUiIcons'
 import FlipToFrontRoundedIcon from '@mui/icons-material/FlipToFrontRounded';
 import { makeStyles } from "@material-ui/core/styles";
 import '../../css/order.css'
+import {getClients,getOrders} from '../../admin/clientApi'
+import UserContext from '../../context/UserContext';
 
 
 
@@ -45,42 +47,48 @@ const useStyles = makeStyles({
 function OrderPerClientTable({onNewPayment}) {
 
 
-  
-  const {clients,fetchClients,onClientSelect,clientSelected,setClientSelected,setPathRedirect,setRedirect} = useContext(ClientContext)
+  const {user,token} = useContext(UserContext)
+  const {onClientSelect,setClientSelected,setPathRedirect,setRedirect} = useContext(ClientContext)
+  // const [clients,setClients] = useState([])
+  // const [orders,setOrders] = useState([])
+  const [data,setData] = useState([])
+  const [values,setValues] = useState({
+    error:'',
+    loading:false
+  })
+ 
 
-
-  const {orders} = useContext(OrderContext)
+  // const {orders} = useContext(OrderContext)
    const classes = useStyles();
+  
 
 
-  //  console.log("Clients data in orders based  table",clients)
-  //  console.log("Order data on order based table",orders)
    const [newData,setNewData] = useState([])
 
 
 
+
   
 
-   const getNewTable = () =>{
+const getNewTable = (data1,data2) =>{
+ const orders = [...data2]
+ const clients = [...data1]
+
      if(orders.length>0){
        let newDataStack = []
      
      clients?.forEach(client => {
-       console.log("CLient IN ORDERPERCLIENT TABLE",client)
-      let orderStack =  orders.filter(order => order.clientId === client._id)
+      
+      let orderStack =  data2.filter(order => order.clientId._id === client._id)
       
       if(orderStack.length>0){
             
            newDataStack.push({client,orders :orderStack ,value : calculateTotalOrderValue(orderStack) , num:calculateNumberOfOrders(orderStack)})  
       }
             
-   
-           setNewData(newDataStack)
-
+         setNewData(newDataStack)
+          
      })  
-
-     console.log("Data table!!!!!!!!!! genetrated : ",newData)
-       
 
     }
   }
@@ -129,11 +137,23 @@ function OrderPerClientTable({onNewPayment}) {
     {title : 'email',field : 'client.emailPrimary',align : 'left',
              cellStyle : { fontSize :'1.6rem',padding:'1rem',border:'1px solid #5c5c5c'},sorting:false}
   ]
-  
+ 
 useEffect(()=>{
-  // console.log("Generating new table")
-  if(clients.length>0 && orders.length>0) getNewTable()
-},[orders])
+   
+ 
+  (async ()=> {
+        setValues({loading:true})
+        const client  = await getClients(user._id,token)
+        const order = await getOrders(user._id,token)       
+        getNewTable(client,order)
+        setData({client,order})  
+        setValues({loading:false})      
+        
+  })()
+   
+},[])
+
+
 
 
 const onOrderClient =(data)=>{
@@ -144,24 +164,26 @@ const onOrderClient =(data)=>{
 
 }
 const onEditClient = (data) => {
-  console.log("Client in the selection ooooooooo: ",data.client)
+  
   setPathRedirect('/client/newclient')
   setClientSelected(data.client)
   // onClientSelect(data.client)
   setRedirect(true)
 
 }
-
+ const {loading,error} = values
 
 
     return (
-        <div>
+        <div>         
                <Menu />
                 <div className = 'container'>                                  
                          <SubMenu />                    
-                              
+                             {loading  && <div className='fs-3 text-secondary text-center'>Loading...</div>} 
+                             {error && <div className='fs-3 text-danger text-center' >Error fetching data</div>}
+                             
                             <div className="row  fs-4">                                                              
-                                
+                              
                                 <MaterialTable columns = {columns}
                                                 data = {newData}
                                                 icons = {tableIcons}
@@ -193,8 +215,7 @@ const onEditClient = (data) => {
                                                         }
                                                 ]}
                                                 components = {{
-                                                  Pagination:props => (
-                                                    console.log(props),
+                                                  Pagination:props => (                                                   
                                                     (
                                                       <TablePagination 
                                                       component = 'div'
@@ -217,7 +238,7 @@ const onEditClient = (data) => {
                                                   )
                                                 }}
                                                 options = {{
-                                                   filtering : true, pageSizeOptions:[10,20,50,100]
+                                                   filtering : true, pageSizeOptions:[5,10,20,50,100],rowsPerPage:25
                                                   ,paginationType:'stepped',exportAllData : true,
                                                    exportFileName : 'clientdata',addRowPosition:"first",
                                                    actionsColumnIndex:0,

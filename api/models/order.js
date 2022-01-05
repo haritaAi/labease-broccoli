@@ -1,25 +1,6 @@
 const mongoose = require('mongoose')
 const {ObjectId} = mongoose.Schema
 
-// const ProductOrderedSchema = new mongoose.Schema({
-//         productId:{
-//                type : ObjectId,
-//                ref:"Product" 
-//         },
-//         product:String,       
-//         price:Number,
-//         discount:Number,
-//         discount_type:String,
-//         teethSelected : Array,
-//         total:Number,
-//         units:Number,
-//         type:String,
-
-
-// })
-
-// const ProductOrdered = mongoose.model("ProductsOrdered",ProductOrderedSchema)
-
 
 
 const OrderSchema = new mongoose.Schema({
@@ -40,7 +21,7 @@ const OrderSchema = new mongoose.Schema({
           type:ObjectId,
           ref:"Client"
       },
-      client:String,
+      client:String,      
       patient:String,
       user:String,
       shipment:String,

@@ -1,25 +1,26 @@
 import React,{useState,useEffect,useContext} from 'react';
-import { Link } from 'react-router-dom';
 import InvoiceContext from '../context/InvoiceContext';
 import Menu from '../components/menu'
-import AccountOrdersTable from '../components/Accounts/AccountOrderTable'
+
 import InvoiceTable from '../components/Accounts/Invoice/InvoiceTable';
-import Invoice from '../components/Accounts/Invoice/Invoice' 
+// import Invoice from '../components/Accounts/Invoice/Invoice' 
 import SubMenuAccounts from '../components/Accounts/SubMenuAccounts'
 import {getInvoices} from '../admin/clientApi'
-import { useAsyncDebounce } from 'react-table';
+
 import InvoiceDetail from '../components/Accounts/Invoice/InvoiceDetail'
 
 
 const  Accounts = (props) => {    
   
-    const {invoices,fetchInvoices,invoiceSelected,setInvoiceSelected} = useContext(InvoiceContext)
-     
-     const [message,setMessage] = useState('')
-     const [alert,setAlert] = useState(false)
+    const {invoiceSelected,setInvoiceSelected} = useContext(InvoiceContext)
+     const [invoices,setInvoices] = useState([])
+    
     
      const [showDetail,setShowDetail] = useState(false)
-
+     const [values,setValues] = useState({
+         error:'',
+         loading:false
+     })
 
 
 const handleInvoiceSelect = invoice => {
@@ -27,25 +28,46 @@ const handleInvoiceSelect = invoice => {
     //    setCurrentInvoice(invoice)
        setInvoiceSelected(invoice)
        setShowDetail(true)
-   console.log("Invoice selected : ",invoice)
+   
 }
+const fetchInvoices = async () => {
+    setValues({error : '',loading:true})
+    await  getInvoices()
+           .then(data => {
+               if(data.error){
+                  setValues({error : data.error,loading:false})
+               }
+               else {
+                //    console.log("Invoices generated in Route :",data)
+                   setInvoices(data)
+                  setValues({error : '',loading:false})
 
+               }
+           })
+           .catch(error =>{
+            setValues({error : error,loading:false})
+
+           } 
+              )
+ }
 
   useEffect(()=>{
+
    fetchInvoices()
    setInvoiceSelected(null)
   },[])   
   
-
+const {error,loading} = values
 
     return (
         <div >
             <Menu />
            
             <SubMenuAccounts  />
-          
+                  {loading && <div className='fs-3 text-center text-secondary'>Loading....</div>}
+                   {error && <div className='fs-3 text-center text-secondary'>Error fetching Data</div>}
                    <div className="container">
-                       {alert &&  <div className = 'text-red'><b>{message}</b></div>}                      
+                                            
                         {!showDetail && invoices.length > 0 &&  <InvoiceTable invoices = {invoices} 
                                                        onInvoiceSelect = {handleInvoiceSelect}                                                     
                                                        path = '/accounts' />}

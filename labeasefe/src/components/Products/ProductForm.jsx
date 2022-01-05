@@ -4,7 +4,7 @@ import {createProduct,updateProduct} from '../../admin/clientApi';
 import UserContext  from '../../context/UserContext';
 import Menu from '../menu'
 
-const ProductForm = ({categories,productTypes,fetchProducts,productToEdit}) => {
+const ProductForm = ({categories,productTypes,fetchProducts,productToEdit,onCancel}) => {
 
   const history = useHistory()
 
@@ -346,7 +346,7 @@ else {
 
                   <div className ='d-flex flex-row justify-content-end mt-3'> 
                         <button className="btn btn-info mx-3 fs-3 text-white" onClick = {handleSave}>Save</button>
-                        <button className="btn btn-info mx-3 fs-3 text-white"  onClick = {()=>history.goBack()}>Cancel</button>
+                        <button className="btn btn-info mx-3 fs-3 text-white"  onClick = {onCancel}>Cancel</button>
                   </div>
                 </form>
             </div>

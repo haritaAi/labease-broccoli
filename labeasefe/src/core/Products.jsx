@@ -14,21 +14,42 @@ import '../css/product.css'
 const Products = (props) => {
 
    
-    const [showProductTypes,setShowProductTypes] = useState(false)
     const [showProductsTable,setShowProductsTable] = useState(true)
     const [productForm,setProductForm] = useState(true)
-    const [showcategory,setShowCategory] = useState(false)
+  
     const [categories,setCategories] = useState([])
     const [productTypes,setProductTypes] = useState([])
     const [productSelected,setProductSelected] = useState(null) 
-    const {products,fetchProducts} = useContext(ProductContext)
+    const [products,setProducts] = useState([])
     const {user,token} = useContext(UserContext)
-
+    const [values,setValues] = useState({
+        error:'',
+        loading:false
+    })
     const [message,setMessage] = useState('')
     const [alert,setAlert] = useState(false)
     const [currentTab ,setCurrentTab] = useState(1)
 
-    const fetchCategories = async () => {
+    const fetchProducts = async () => {     
+          setValues({error:'', loading:true})
+        await getProducts(user._id,token)
+                       .then(data => {
+                           if(data.error){
+                          setValues({error : data.error,loading : false})
+                           }
+                           else {
+                              setValues({error : '',loading : false})
+                              setProducts(data)
+                           }
+                       })
+                       .catch(err => { 
+                        setValues({error : err,loading : false}) })
+
+
+}
+
+
+const fetchCategories = async () => {
  
         let categories = await  getCategories()
         setCategories(categories) 
@@ -39,17 +60,13 @@ const Products = (props) => {
        let productTypes = await getProductTypes()
        setProductTypes(productTypes)
 
-       console.log("Product types received :",productTypes)
+       
    }
 
-const handleEditProduct = product => {
-  
-    console.log("Product to be Edited in table :",product)
-    setProductSelected(product)
-    setCurrentTab(3)
-    setShowProductsTable(false)    
-    setProductForm(true)
+const handleEditProduct = product => {  
     
+    setProductSelected(product)
+    setCurrentTab(3)   
  
 }
 
@@ -57,21 +74,13 @@ const handleDeleteProduct =  async product => {
   
     await deleteProduct(user._id,token,product)
          .then(
-              data => {
-            //  if(data.status !== 200)
-            //  {
-            //     setMessage("Error deleting Product ")
-            //     setAlert(true)
-            //     setTimeout(()=>setAlert(false),2000)
-
-            //  }
-            //  else{
+              data => {           
                 setMessage("Product  was deleted successfully")
                 setAlert(true)
                 setTimeout(()=>setAlert(false),2000)
                 fetchProducts()
                 
-        //      }
+        
          }
          )
          .catch(err => {
@@ -90,29 +99,27 @@ const productMenuTabs = ()=> {
            <div className="btn  text-white fs-3 p-2" 
                 style = {currentTab === 1 ?{backgroundColor:'tomato'}:{backgroundColor:'dodgerblue'} }
                 onClick = {()=>{
-                    setShowProductsTable(true)
+                   
                     setCurrentTab(1)
                 }}
                 >Products</div> 
            <div className="btn  text-white fs-3 p-2" 
                 style = {currentTab === 2 ?{backgroundColor:'tomato'}:{backgroundColor:'dodgerblue'} }
                 onClick = {()=>{
-                    setShowProductsTable(false)
+                   
                     setCurrentTab(2)
                 }}
                 >Product Types</div> 
            <div className="btn  text-white fs-3 p-2" 
                 style = {currentTab === 3 ?{backgroundColor:'tomato'}:{backgroundColor:'dodgerblue'} }
-                onClick = {()=>{
-                    setProductSelected(null)
-                    setShowProductsTable(false)
+                onClick = {()=>{                   
                     setCurrentTab(3)
                 }}
                 >Add New Product</div> 
            <div className="btn  text-white fs-3 p-2" 
                 style = {currentTab === 4 ?{backgroundColor:'tomato'}:{backgroundColor:'dodgerblue'} }
                 onClick = {()=>{
-                    setShowProductsTable(false)
+                    
                     setCurrentTab(4)
                 }}
                 >Category</div> 
@@ -121,10 +128,14 @@ const productMenuTabs = ()=> {
     )
 } 
 
-
+const handleCancel = () => {
+    setProductSelected(null)
+    setCurrentTab(1)
+}
 
 
 useEffect(()=>{
+    fetchProducts()
     fetchCategories()
     fetchProductTypes()
 },[productSelected])
@@ -146,6 +157,7 @@ useEffect(()=>{
                                                     productTypes = {productTypes}
                                                     productToEdit = {productSelected}
                                                     fetchProducts = {fetchProducts}
+                                                    onCancel={handleCancel}
                                                     /> }
                     { currentTab===1 && <ProductsTable products = {products} 
                                                           fetchProducts = {fetchProducts}

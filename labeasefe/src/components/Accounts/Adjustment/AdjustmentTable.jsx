@@ -17,7 +17,7 @@ import AdjustmentContext from '../../../context/AdjustmentContext'
 import {getFormatDate} from '../../DateAPI/index'
 
 import Modal from '../../../components/Modal'
-import {deleteAdjustment, updateInvoice} from '../../../admin/clientApi'
+import {deleteAdjustment, updateInvoice,getAllAdjustments} from '../../../admin/clientApi'
 
 
 
@@ -52,11 +52,39 @@ const AdjustmentTable = (props) => {
 
     const classes = useStyles();
    
-    const {adjustments,fetchAdjustments} = useContext(AdjustmentContext)
+    // const {adjustments,fetchAdjustments} = useContext(AdjustmentContext)
     const {user,token} = useContext(UserContext)
     const [adjustmentSelected,setAdjustmentSelected] = useState(null)
- 
+   const [adjustments,setAdjustments] = useState([])
+   const [values,setValues] = useState({
+    error :'',
+    loading:false
+})
+const {error,loading} = values
+  
+  
+  const  fetchAdjustments = async () => {
+    setValues({error : '',loading:true})
 
+    await getAllAdjustments()
+    .then(data => {
+        if(data.error){
+          setValues({error : data.error,loading:false})
+
+        }
+        else {
+            // console.log("ADJUSTMENTS IN ROUTE :",data)
+            setAdjustments(data)
+            setValues({error : '',loading:false})
+
+        }
+    })
+    .catch(error =>{
+      setValues({error : error,loading:false})
+
+    } 
+       )
+}
 
 const onDeleteAdjustment = rowData => {
 
@@ -97,6 +125,8 @@ const showDetail = () => {
 
     return(
         <div className = 'fs-4'>
+            
+
         <Modal title = 'Credit ADjustment '>
            <div>Against Invoice# :<b> {rowData.invoice.invoiceNo}</b></div>
               <div>Client :<b>{(rowData.client.name).toUpperCase()}</b> </div>
@@ -158,11 +188,15 @@ const showDetail = () => {
     
  ]
 
-useEffect(()=>{},[])
+useEffect(()=>{
+  fetchAdjustments()
+},[])
 
 
     return (
         <div className = 'container-fluid'>
+            {loading && <div className='fs-3 text-center text-secondary'>Loading...</div>}
+
             {adjustmentSelected && showDetail()}
         {adjustments.length>0 && 
                <MaterialTable columns = {columns}

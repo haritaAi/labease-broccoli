@@ -4,11 +4,11 @@ import {API} from '../../backend'
 
 
 
-export const createClient = (userId,token,client) => {
+export const createClient = async (userId,token,client) => {
 
-    console.log("Client received in API :",JSON.stringify(client))
+   
        
-      return  fetch(`${API}/clients/create/${userId}`,{
+      return await  fetch(`${API}/clients/create/${userId}`,{
             method : "POST",
             headers : {
                      
@@ -44,10 +44,10 @@ export const getClients = (userId,token) => {
       .catch(err => {return(err)})
 }
 
-export const updateClient = (userId,token,client) => {
+export const updateClient = async (userId,token,client) => {
 
    
-       return fetch(`${API}/update/clients/${userId}`,{
+       return  await fetch(`${API}/update/clients/${userId}`,{
            method: "PUT",
            headers : {
                Accept : 'application/json',
@@ -59,9 +59,9 @@ export const updateClient = (userId,token,client) => {
          .catch(err => {return(err)})
 }
 
-export const deleteClient = (clientId,userId,token) => {
+export const deleteClient = async (clientId,userId,token) => {
  
-   return fetch(`${API}/clients/${userId}`,{
+   return await fetch(`${API}/clients/${userId}`,{
        method:"DELETE",
        headers :{
            Authorization : `Bearer ${token}`
@@ -142,10 +142,10 @@ export const getNextAdjustmentSequence = () => {
    
 }
 
-export const createOrder = (userId,token,order) => {
-    console.log("Order received in api :",order)
+export const createOrder = async (userId,token,order) => {
+    
        
-    return  fetch(`${API}/orders/create/${userId}`,{
+    return await  fetch(`${API}/orders/create/${userId}`,{
           method : "POST",
           headers : {
               Accept : 'application/json',           
@@ -193,9 +193,9 @@ export const getOrders = (userId,token) => {
             })
       .catch(err => {return(err)})
 }
-export const deleteOrder = (orderId,userId,token) => {
+export const deleteOrder = async (orderId,userId,token) => {
  
-    return fetch(`${API}/orders/${userId}`,{
+    return await fetch(`${API}/orders/${userId}`,{
         method:"DELETE",
         headers :{
             Authorization : `Bearer ${token}`
@@ -209,10 +209,10 @@ export const deleteOrder = (orderId,userId,token) => {
 
 
 
-export const  createProductType  = (userId,token,productType) => {
+export const  createProductType  = async (userId,token,productType) => {
   
        
-    return  fetch(`${API}/producttypes/create/${userId}`,{
+    return await fetch(`${API}/producttypes/create/${userId}`,{
           method : "POST",
           headers : {
                    
@@ -245,10 +245,10 @@ export const getProductTypes = () => {
       .catch(err => {return(err)})
 }
 
-export const updateProductType = (userId,token,productType) => {
+export const updateProductType = async (userId,token,productType) => {
 
     // console.log("Product in index : ",productType)
-    return fetch(`${API}/producttypes/update/${userId}`,{
+    return await  fetch(`${API}/producttypes/update/${userId}`,{
         method: "PUT",
         headers : {
             Accept : 'application/json',
@@ -260,10 +260,10 @@ export const updateProductType = (userId,token,productType) => {
       .catch(err => {return(err)})
 }
 
-export const deleteProductType = (productType,userId,token) => {
+export const deleteProductType =async (productType,userId,token) => {
     
  
-    return fetch(`${API}/producttypes/delete/${userId}`,{
+    return  await fetch(`${API}/producttypes/delete/${userId}`,{
         method:"DELETE",
         headers :{
             Accept : 'application/json',
@@ -296,9 +296,9 @@ export const deleteProductType = (productType,userId,token) => {
         } )
 
  }
- export const getProducts = (userId,token) => {
+ export const getProducts = async (userId,token) => {
  
-     return fetch(`${API}/products/${userId}`,{
+     return await fetch(`${API}/products/${userId}`,{
          method : 'GET',
          headers:{
              'Content-Type' : 'application/json',
@@ -313,10 +313,10 @@ export const deleteProductType = (productType,userId,token) => {
      
   }
  
-export const updateProduct = (userId,token,product) => {
+export const updateProduct =async (userId,token,product) => {
     
 
-    return  fetch(`${API}/products/update/${userId}`,{
+    return await fetch(`${API}/products/update/${userId}`,{
        method : "PUT",
        headers : {
             Accept : 'application/json',                
@@ -334,10 +334,9 @@ export const updateProduct = (userId,token,product) => {
        } )
     }
 
-    export const deleteProduct = (userId,token,product) => {
-        console.log("In API Deleteproduct call")
-
-        return fetch(`${API}/products/delete/${userId}`,{
+    export const deleteProduct =async (userId,token,product) => {
+    
+        return await  fetch(`${API}/products/delete/${userId}`,{
             method:"DELETE",
             headers :{
                 Accept : 'application/json',
@@ -387,10 +386,10 @@ export const updateProduct = (userId,token,product) => {
     }
     /////////////////////INVOICES
 
-    export const createInvoice = (userId,token,invoice) => {
-        console.log("Order received in api :",invoice)
+    export const createInvoice =async (userId,token,invoice) => {
+        
            
-        return  fetch(`${API}/invoices/create/${userId}`,{
+        return  await fetch(`${API}/invoices/create/${userId}`,{
               method : "POST",
               headers : {
                   Accept : 'application/json',           
@@ -431,9 +430,9 @@ export const updateProduct = (userId,token,product) => {
           .catch(err => {return(err)})
 
     }
-   export const updateInvoice = (userId,token,invoice) => {
-       console.log("invoice to ne updates in api :",invoice)
-    return  fetch(`${API}/update/invoices/${userId}`,{
+   export const updateInvoice =async (userId,token,invoice) => {
+     
+    return await fetch(`${API}/update/invoices/${userId}`,{
         method : "PUT",
         headers : {
              Accept : 'application/json',                
@@ -452,8 +451,8 @@ export const updateProduct = (userId,token,product) => {
 
    } 
 
-    export const getUnpaidInvoices = () => {
-        return fetch(`${API}/invoices/unpaid`,{
+    export const getUnpaidInvoices = async () => {
+        return await fetch(`${API}/invoices/unpaid`,{
             method : 'GET',           
     
         }).then(response => {
@@ -482,9 +481,9 @@ export const getCancelledInvoices = () => {
 
 /////////////////////////////////////////////////RECEIPTS
 
-    export const getAllReceipts = () => {
+    export const getAllReceipts = async () => {
 
-        return fetch(`${API}/receipts`,{
+        return await fetch(`${API}/receipts`,{
             method : 'GET',           
     
         }).then(response => {
@@ -494,10 +493,9 @@ export const getCancelledInvoices = () => {
     }
 
 
-    export const createReceipt = (userId,token,receipt) => {
-        console.log("Receipt received in api :",receipt)
-           
-        return  fetch(`${API}/receipts/create/${userId}`,{
+    export const createReceipt =async (userId,token,receipt) => {
+                  
+        return await fetch(`${API}/receipts/create/${userId}`,{
               method : "POST",
               headers : {
                   Accept : 'application/json',           
@@ -514,8 +512,8 @@ export const getCancelledInvoices = () => {
                   return (err)
               } )           
     };
-    export const updateReceipt = (userId,token,receipt) => {
-        return  fetch(`${API}/receipt/update/${userId}`,{
+    export const updateReceipt =async (userId,token,receipt) => {
+        return await fetch(`${API}/receipt/update/${userId}`,{
             method : "PUT",
             headers : {
                  Accept : 'application/json',                
@@ -534,10 +532,10 @@ export const getCancelledInvoices = () => {
     
        } 
 
-       export const deleteReceipt = (userId,token,receipt) => {
+       export const deleteReceipt = async (userId,token,receipt) => {
         
 
-        return fetch(`${API}/receipts/delete/${userId}`,{
+        return await fetch(`${API}/receipts/delete/${userId}`,{
             method:"DELETE",
             headers :{
                 Accept : 'application/json',
@@ -552,10 +550,10 @@ export const getCancelledInvoices = () => {
 
     /////ADJUSTMENTS/////////////////////////////////////
     
-    export const createAdjustment = (userId,token,adjustment) => {
-        console.log("Receipt received in api :",adjustment)
+    export const createAdjustment =async (userId,token,adjustment) => {
+        
            
-        return  fetch(`${API}/adjustments/create/${userId}`,{
+        return await fetch(`${API}/adjustments/create/${userId}`,{
               method : "POST",
               headers : {
                   Accept : 'application/json',           
@@ -572,8 +570,8 @@ export const getCancelledInvoices = () => {
                   return (err)
               } )           
     };
-export const getAdjustmentByNumber = (adjustmentNo) => {
-    return fetch(`${API}/adjusment/:${adjustmentNo}`,{
+export const getAdjustmentByNumber =async (adjustmentNo) => {
+    return await  fetch(`${API}/adjusment/:${adjustmentNo}`,{
           method : 'GET',
     }).then(response =>{
         return response.json()
@@ -581,9 +579,9 @@ export const getAdjustmentByNumber = (adjustmentNo) => {
     .catch(err => {return(err)})
 }
 
-  export const getAllAdjustments =  () => {
+  export const getAllAdjustments =async  () => {
 
-        return fetch(`${API}/adjustments`,{
+        return await fetch(`${API}/adjustments`,{
             method : 'GET',           
     
         }).then(response => {

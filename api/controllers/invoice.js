@@ -72,7 +72,7 @@ exports.getAllInvoices = (req,res) => {
 exports.getAllUnpaidInvoices = (req,res) => {
    
 
-    Invoice.find({paid : 0,balance :{$gte: 0}})           
+    Invoice.find({balance :{$gte: 0}})           
            .exec((err,invoice) => {
                if(err) return res.json({message : 'Failed to fetch invoices'})
         

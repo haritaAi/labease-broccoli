@@ -274,7 +274,7 @@ if(isUpdate){
 else {
  
     
-     console.log("Order Values  in NewOrderForm: ",newValues)
+    
     
        
          createOrder(user._id,token,newValues)
@@ -369,10 +369,11 @@ const formHeader = () => {
                                                              <select id = 'deliverytime'
                                                                      className = 'col col-md-8 ' 
                                                                      value = {deliverytime}
+                                                                     defaultValue={'Evening 4 - 5'}
                                                                      onChange = {handleChange('deliverytime')} >
                                                                   <option value = 'Morning 10 AM'>Morning 10 AM</option>
                                                                   <option value = 'Afternoon 3'>Afternoon 3</option>     
-                                                                  <option value = 'Evening 4 - 5' selected>Evening 4 - 5</option>     
+                                                                  <option value = 'Evening 4 - 5' >Evening 4 - 5</option>     
                                                                   <option value = 'Prcel 6:30'>Prcel 6:30</option>     
                                                                   <option value = 'Self Delivery'>Self Delivery</option>     
                                                                   <option value = 'Urgent Any-time'>Urgent Any-time</option>     
@@ -497,12 +498,13 @@ const formFooter = () => {
                 <select     id = 'deliveryMehtod'
                             type = 'text' 
                             value = {deliveryMethod}
+                            defaultValue={'Doctor pickup'}
                             onChange = {handleChange('deliveryMethod')} 
                             >
                         
                         <option value = 'courier'>courier</option>
                         <option value = 'Delivery Boy' >Delivery Boy</option>
-                        <option value = 'Doctor pickup' selected >Doctor pickup</option>
+                        <option value = 'Doctor pickup' >Doctor pickup</option>
                         <option value = 'Mail'>Mail</option>
                     </select> 
                     
@@ -510,8 +512,9 @@ const formFooter = () => {
             <div className = 'mx-2' >
                 <div>Status</div>
                 <select  value = {status}
+                         defaultValue={'New'}
                          onChange = {handleChange('status')}>
-                    <option value = 'New' selected>New</option>
+                    <option value = 'New' >New</option>
                     <option value = 'In Production'>In Production</option>
                     <option value = 'Complete'>Complete</option>
                     <option value = 'Hold'>Hold</option>
@@ -790,7 +793,7 @@ const orderForm = () =>{
     
     return (
         <div className =' order-container border border-dark '>
-            {console.log("client selected in order form :",clientSelected)}
+        
             <div className="d-flex flex-row justify-content-between">
                 <div className = 'fs-1'><b>{isUpdate?'Edit' : 'New'}{'  '}Order</b></div>
                { jobs.length > 0 && <div className = 'my-1'>{orderTabs()}</div>}
@@ -864,7 +867,7 @@ const getOrderSequence = async () => {
         .then(data => {          
             
             setOrderNumber(convertToSequnceString(data.sequence_val))  
-            console.log("NEW Order Number generated :",data.sequence_val)
+           
 
         })
         .catch(err => {
@@ -874,23 +877,21 @@ const getOrderSequence = async () => {
         })
 }
 
-const findClientFromOrderSelected = () => {
-         let newClient =  clients.filter(client => client._id === orderSelected.clientId)
-         setClientSelected(newClient[0])
-}
+
 
 useEffect(()=>{
    if(orderSelected){
-       setIsUpdate(true)       
-       findClientFromOrderSelected()
+      
+       setIsUpdate(true)  
+       setClientSelected(orderSelected.clientId)     
+    
        setJobs([...orderSelected.products])
        setOrderNumber(orderSelected.orderNo)
        setValues({...orderSelected})
      
    }
    else{
-        getOrderSequence()
-        console.log("NEW Order Number generated :",orderNumber)
+        getOrderSequence()      
 
         setValues({...values,orderNo:orderNumber})
         setIsUpdate(false)

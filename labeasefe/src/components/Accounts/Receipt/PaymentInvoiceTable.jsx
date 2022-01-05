@@ -8,8 +8,7 @@ const  PaymentInvoiceTable = ({invoices,onInvoiceApplyCancel,onCashApplied}) => 
 
 
 const handleChange = index  => event => {
-    console.log("Value : ",event.target.value)
-    console.log("Index Of selected invoice :",index)
+ 
     onCashApplied(event.target.value,index)
 }
 

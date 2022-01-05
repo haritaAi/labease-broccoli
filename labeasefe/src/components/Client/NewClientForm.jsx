@@ -21,8 +21,7 @@ import Modal from '../../components/Modal'
 import NewAddressForm from './NewAddressForm';
 import AddressTable from './AddressTable';
 import AddDoc from './AddDoc';
-
-
+import AddIcon from '@mui/icons-material/Add';
 
 
 
@@ -502,7 +501,7 @@ const handleAddDocEdit = (doc,index) => {
                                                
                                                 <div className = 'd-flex flex-sm-row  align-items-center justify-content-between'> 
                                                             <div className="w-20 px-1">
-                                                                     <label>Code</label>
+                                                                     <div>Code</div>
                                                                     <input  className = 'form-control'
                                                                                     disabled 
                                                                                     type = 'number'
@@ -512,7 +511,7 @@ const handleAddDocEdit = (doc,index) => {
                                                                                     />
                                                             </div>
                                                                 <div className="w-20 px-1">
-                                                                    <label>DCI Reg#</label>
+                                                                    <div>DCI Reg#</div>
                                                                     <input   className = 'form-control' 
                                                                                     type = 'text'
                                                                                     label = 'DCI Reg#'
@@ -679,8 +678,11 @@ const handleAddDocEdit = (doc,index) => {
                                                        </div>
                                                        <div className="btn  fs-3 mt-4 text-dark" id = 'addEmailIcon'>
                                                            <Tooltip title = {<div style ={{fontSize : '1.4rem', padding:'0.5rem'}}>add Email</div>}>
-                                                                <FontAwesomeIcon  icon = 'plus'  
-                                                                   onClick = {() => handleAddEmail()}/>
+                                                                {/* <FontAwesomeIcon  icon = 'plus'  
+                                                                   onClick = {() => handleAddEmail()}/> */}
+                                                                   <IconButton onClick={()=> handleAddEmail()}>
+                                                                       <AddIcon />
+                                                                   </IconButton>
                                                                 </Tooltip>  
 
                                                        </div>                                                        
@@ -695,7 +697,7 @@ const handleAddDocEdit = (doc,index) => {
                                                                     id = 'smsOption'
                                                                                                                                       
                                                                      />
-                                                             <label className ="form-check-label" for="flexCheckDefault">SMS</label>
+                                                             <label className ="form-check-label" htmlFor="flexCheckDefault">SMS</label>
                                                         </div>
                                                         <div className ="form-check  ">
                                                         <input className ="form-check-input" 
@@ -704,7 +706,7 @@ const handleAddDocEdit = (doc,index) => {
                                                                id = 'emailOption'
                                                                                                                          
                                                                />
-                                                        <label className ="form-check-label" for="flexCheckChecked">Email </label>
+                                                        <label className ="form-check-label" htmlFor="flexCheckChecked">Email </label>
                                                         </div>
 
                                              </div>

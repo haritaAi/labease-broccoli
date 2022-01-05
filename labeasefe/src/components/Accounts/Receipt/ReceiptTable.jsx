@@ -9,13 +9,14 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import PrintIcon from '@mui/icons-material/Print';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import UserContext from '../../../context/UserContext';
 import ClientContext  from '../../../context/ClientContext';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import {getFormatDate} from '../../DateAPI/index'
 import ReceiptContext from '../../../context/ReceiptContext';
 import ReceiptPrintIcon from '../../print/Receipt/ReceiptPrintIcon';
-
+import {getClients} from '../../../admin/clientApi'
 
 
 import Popover from '@mui/material/Popover';
@@ -50,14 +51,23 @@ const useStyles = makeStyles({
 const ReceiptTable = ({receipts,onReceiptSelect,path}) => {
 
     const classes = useStyles();
-    const history = useHistory()
-    const {clients,setClientSelected,onClientSelect} = useContext(ClientContext)
-    const {receiptSelected,setReceiptSelected} = useContext(ReceiptContext)
-    const [showInvoiceDetail,setShowInvoiceDetail] = useState(false) 
+    
+    const {setClientSelected} = useContext(ClientContext)
+    const [clients,setClients] = useState([])
+    const {user,token} = useContext(UserContext)  
+    const {setReceiptSelected} = useContext(ReceiptContext)
+    
     const [searchString,setSearchString] = useState('')
     const [anchorEl,setAnchorEl] = useState(null)
      const open = Boolean(anchorEl)
      const id = open ? 'simple-popover' : undefined;
+     const [values,setValues] = useState({
+      error :'',
+      loading:false
+  })
+  
+  const {error,loading} = values
+
 
 const findClientSelected = (id) => {
         let newClient = clients.filter(client => client._id === id)
@@ -65,6 +75,26 @@ const findClientSelected = (id) => {
      console.log("CLient Selected :",newClient)
      return newClient[0]
 }
+const fetchClients =  async () => {
+  setValues({error : '',loading : true});
+await  getClients(user._id,token)
+    .then(data => {
+        if(data.error){
+        setValues({error : "Error fetching data",loading : false})       
+        window.alert("Failed to Connect to database ")
+        }
+        else {
+            setClients(data)
+            setValues({error : '',loading : false})
+        }
+    })
+    .catch(err => {       
+                        setValues({error : err,loading: false})
+                        window.alert("Failed to Connect to database ")
+                      
+                        })
+
+} 
 const handleSearch = e =>{
    
     setSearchString(e.target.value)
@@ -146,12 +176,15 @@ const columns = [
 
 
 useEffect(()=>{
+  fetchClients()
   setClientSelected(null)
   setReceiptSelected(null)
 },[])
 
   return (
       <div className = 'container-fluid'>
+            {loading && <div className='fs-3 text-center text-secondary'>Loading...</div>}
+
          {(receipts.length > 0) && 
            <MaterialTable
                 columns ={columns}

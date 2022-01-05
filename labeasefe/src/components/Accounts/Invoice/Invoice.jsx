@@ -1,33 +1,20 @@
 import React,{useContext,useState,useEffect} from 'react';
-import {Link} from 'react-router-dom'
+
 import Menu from '../../menu'
 import ClientContext from '../../../context/ClientContext';
-import OrderContext from '../../../context/OrderContext';
-import UserContext from '../../../context/UserContext';
-import Client from '../../../core/Client';
-import ClientOrderTable from '../../ClientOrderTable';
-import { getNextInvoiceSequence, updateOrder } from '../../../admin/clientApi';
-import OrderInInvoiceForm from './OrderInInvoiceForm';
+
 import SubMenuAccounts from '../SubMenuAccounts';
 import NewInvoice from './NewInvoice';
 import GenerateInvoices from './GenerateInvoices';
 import AwaitPaymentInvoices from './AwaitPaymentInvoices';
 import PaidInvoice from './PaidInvoice';
 import CancelledInvoice from './CancelledInvoice';
-import PDFGenerator from '../../print/PDFGenerator';
+
 
 const Invoice = (props) =>  {
   
-const {clients,clientSelected,setClientSelected,onClientSelect} = useContext(ClientContext)  
-const {user,token} = useContext(UserContext)
-const {orders,fetchOrders} = useContext(OrderContext)  
-const [invoiceNumber,setInvoiceNumber] = useState(null)
-const [message,setMessage] = useState('')
-const [alert,setAlert] = useState(false)
-const [showOrderTable,setShowOrderTable] = useState(false)
-const [showInvoiceTable,setShowInvoiceTable] = useState(false)
-const [ordersSelected,setOrdersSelected]  = useState([])//orders to be invoiced
-const [clientOrders,setClientOrders] = useState([])//all uninvoiced orders
+const {setClientSelected} = useContext(ClientContext)  
+
 
 const [currentTab,setCurrentTab] = useState(1)
 
@@ -92,7 +79,7 @@ useEffect(()=>{
                         <div className="col-12 col-md-10">
                         {currentTab === 1 && <NewInvoice />}
                         {currentTab === 2 && <GenerateInvoices />}
-                        {currentTab === 3 && <AwaitPaymentInvoices />}
+                        {currentTab === 3 && <AwaitPaymentInvoices  />}
                         {currentTab === 4 && <PaidInvoice />}
                         {currentTab === 5 && <CancelledInvoice />}
                         </div>

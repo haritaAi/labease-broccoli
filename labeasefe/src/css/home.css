@@ -57,7 +57,7 @@
 }
 .company-background{
     background-color: rgb(225, 227, 228);
-    padding:5rem;  
+     
 }
 .logo-image{
     
@@ -78,6 +78,11 @@
           width : 50%;  
          
   
+}
+.company-heading{
+    color:'#000';
+    font-size:2rem;
+    font-weight:500;
 }
 
 }
@@ -101,7 +106,12 @@
     }
     .company-background{
         background-color: rgb(225, 227, 228);
-        padding:5rem;  
+        padding:1rem;  
+    }
+    .company-heading{
+        color:'#000';
+        font-size:3rem;
+        font-weight:500;
     }
     
 }
