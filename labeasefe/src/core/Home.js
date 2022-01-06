@@ -30,7 +30,7 @@ useEffect(()=>{
 
                        <div className=" d-flex  flex-wrap   ">
                       { companies.map((company,index) =>  
-                            <div className=" border border-secondary ">
+                            <div className=" border border-secondary " key = {index}>
                             <div className="d-flex flex-column flex-sm-row  company-container  company-background"
                                 onClick = {()=> console.log(`Hi , this is ${company}`)}
                                 >

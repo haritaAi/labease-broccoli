@@ -1,15 +1,19 @@
 import React,{useState,useContext, useEffect} from 'react';
+
 import MaterialTable from 'material-table';
 import tableIcons from '../icons/MaterialUiIcons'
 import {getClients} from '../admin/clientApi'
 import UserContext from '../context/UserContext';
+import ClientContext from '../context/ClientContext'
 
-const ClientOrderTable = ({ onClientSelection}) =>  {
 
- 
+const ClientOrderTable = ({onClientSelection}) =>  {
+
+  
   const [clients,setClients] = useState([])
   const {user,token} = useContext(UserContext)
- const  [values,setValues] = useState({
+  const {setClientSelected} = useContext(ClientContext)
+  const  [values,setValues] = useState({
    error:'',
    loading:false
  })
@@ -47,18 +51,21 @@ const ClientOrderTable = ({ onClientSelection}) =>  {
 } 
 useEffect(()=>{
   fetchClients()
-
+  
 },[])
+ 
 
     return (
         <div className = 'container-fluid ' >
           {loading && <div>Loading...</div>}
+          
         <MaterialTable columns = {columns} 
                        data = {clients}   
                        icons = {tableIcons} 
                        title = "Client Data"
-                       onRowClick = {(row,data) => {
-                        onClientSelection(data)
+                       onRowClick = {(event,rowData) => {   
+                                                                   
+                          onClientSelection(rowData)
                        }}
                                            
                        options = {{filtering : true, pageSizeOptions:[10,25,50,100],

@@ -106,7 +106,8 @@ const fetchProductTypes = async () => {
 useEffect (() => {
 
    fetchProductTypes()
-   if(job){   
+   if(job.length>0){   
+     
      setUpdate(true)
      setteethSelected(job.teethSelected)
      getArchs()
@@ -133,7 +134,7 @@ const setArch = (toothIndex,arch) => {
 
   if(arch === '1')         
        {
-          console.log("INside upperArch1n")
+          // console.log("INside upperArch1n")
            let newIndex = upperArch1.findIndex( tooth => tooth.index === toothIndex )
            let newArch = [...upperArch1] 
            newArch[newIndex].state = true
@@ -169,7 +170,7 @@ const setArch = (toothIndex,arch) => {
 }
 const getArchs = () => {
    
-  console.log("TEETH  SELECTED IN GETARCH",teethSelected)
+  // console.log("TEETH  SELECTED IN GETARCH",teethSelected)
  if(teethSelected.length > 0){
   
  let teethArray = [...job.teethSelected]
@@ -236,7 +237,7 @@ const getArchs = () => {
  } 
 
 const handleToothReset = (option) => {
-    console.log("In handleToothReset",option)
+    // console.log("In handleToothReset",option)
   let newArray;
   
  if(option === 'None')   
@@ -293,7 +294,7 @@ const handleToothReset = (option) => {
 }
 const handleProductSelection = (product) => {
       //  event.preventDefault() 
-       console.log("Product selected  in tooth selector:", product)
+      //  console.log("Product selected  in tooth selector:", product)
   
        setProductSelected(product);
        if(product.slabPrice){
@@ -319,7 +320,7 @@ const handleChange = name => event => {
    setValues({...values,[name]:event.target.value})
 }
 const handleJobEdit =() => {
-  console.log("JOB ID IN EDIT ",job.id)
+  // console.log("JOB ID IN EDIT ",job.id)
   let productTypeSeleceted = productTypes.filter(p => p.name === productSelected.productType.name )
 
   let newValues ={
@@ -341,7 +342,7 @@ const handleJobEdit =() => {
     teethSelected
   }
   
-  console.log("NEW JOB TO BE SAVED IS :",newValues)
+  // console.log("NEW JOB TO BE SAVED IS :",newValues)
   onEditJob(newValues)
    setValues({
     id:0, 
@@ -367,7 +368,7 @@ setProductSelected(null)
 const handleJobSave = () => { 
  
    let productTypeSeleceted = productTypes.filter(p => p.name === productSelected.productType.name )
-   console.log("Details of product type selected :",productTypeSeleceted[0])
+  //  console.log("Details of product type selected :",productTypeSeleceted[0])
 
 
   let newValues ={
@@ -412,11 +413,11 @@ const handleJobSave = () => {
    setProductSelected(null)
 }
 const calculateBill = () => {
-  console.log("Product SELECTED :::::",productSelected)
+  // console.log("Product SELECTED :::::",productSelected)
   let amount = 0;
   
   if(productSelected.slabPrice){
-    console.log("SlabPrice true")
+    // console.log("SlabPrice true")
      let totalTeeth = teethSelected.length
     //  let  slab1End = productSelected.slab1.end
     //  let  slab2End = productSelected.slab2.end
@@ -426,13 +427,13 @@ const calculateBill = () => {
      {
           amount= amount + parseInt(slab1Price)
           teethArray++
-          console.log("Amount:",amount)
+          // console.log("Amount:",amount)
      } 
      if(slab2End){
        while(teethArray < slab2End && teethArray<totalTeeth){
         amount= amount + parseInt(slab2Price)
         teethArray++
-        console.log("Amount:",amount)
+        // console.log("Amount:",amount)
 
        }
      }

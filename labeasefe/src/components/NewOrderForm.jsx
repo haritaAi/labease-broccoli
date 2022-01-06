@@ -12,8 +12,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 // import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
-import DateFnsUtils from '@date-io/date-fns';
+
 // import LuxonUtils from '@date-io/luxon';
 import {
     
@@ -29,28 +28,28 @@ import OrderContext from '../context/OrderContext.js';
 import { createOrder } from '../admin/clientApi/index.js';
 import Menu from '../components/menu'
 import '../css/order.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { IconButton } from '@mui/material';
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import {getClients} from '../admin/clientApi'
 
 
 
 
-const NewOrderForm = ({onAddOrderCancel,onConfirmOrder}) =>  {
+const NewOrderForm = () =>  {
 
 const history = useHistory()
 
-   
-const toDay = getToDate()
-// const toDay = new Date().toDateString()
-
 const {user,token} = useContext(UserContext)
-const {clients,clientSelected,onClientSelect,setPathRedirect,setRedirect,setClientSelected} = useContext(ClientContext)
- const {orders,fetchOrders,orderSelected,setOrderSelected} = useContext(OrderContext)
+
+const {clientSelected,onClientSelect,setPathRedirect,setRedirect,setClientSelected} = useContext(ClientContext)
+ const {fetchOrders,orderSelected,setOrderSelected} = useContext(OrderContext)
 // const {products} = useContext(ProductContext)
 const [orderNumber,setOrderNumber] = useState(null)
 const [currentOrderTab,setCurrentOrderTab] = useState(1)
-let totalOrderAmount = 0
+
+
+// let totalOrderAmount = 0
 const [values,setValues] = useState({
     
     orderNo:0,
@@ -99,30 +98,87 @@ const [addProduct,setAddProduct] = useState(false)
 const [order_Date,handleOrderDate] = useState(new Date())
 const [due_Date,handleDueDate] = useState(new Date())
 const [dateIn_Date,handleDateIn] = useState(new Date())
-const [update_Date,handleUpdateDate] = useState(new Date())
+// const [update_Date,handleUpdateDate] = useState(new Date())
 const [jobs,setJobs] = useState([])
-
-   
+const [clients,setClients] = useState([])
+const [dataFetch,setDataFetch] = useState({
+    error:'',
+    loading:false
+})   
 const {_id,modelno,orderNo,orderAmount,status,orderDate,updated,dueDate,dateIn,deliverytime,deliveryMethod,ordertime,client,clientId,
        patient,shipment,additionalAmount,trayNo,shade1,shade2,shade3,shadeNote,articulatorTag,priority,notes,department,
        priceBand,billTo,orderNotes,invoiceId,products,productsList,assignedTo,workType} = values
 
+const fetchClients =  async () => {
+        setDataFetch({error : '',loading : true});
+      await  getClients(user._id,token)
+          .then(data => {
+              if(data.error){
+              setDataFetch({error : "Error fetching data",loading : false})       
+              window.alert("Failed to Connect to database ")
+              }
+              else {
+                  setClients(data)
+                  setDataFetch({error : '',loading : false})
+              }
+          })
+          .catch(err => {       
+                              setDataFetch({error : err,loading: false})
+                              window.alert("Failed to Connect to database ")
+                            
+                              })
+  
+  } 
+
 const handleChange = name => event => {
-  const value = event.target.value; 
-  console.log(`${name} : ${value}`)
- 
+  const value = event.target.value;  
   setValues({...values,[name]:value})
  
 } 
 
-
-const calculateTotalBill = (jobset) => {
+// const handleClientSelect = (data) => {
+//   console.log("Client in new Order form :",data)
+//   setNewClientSelected(data)
+//   onClientSelect(data)
+//   setClientSelected(data)
   
+
+// }
+const renderTable = () => {
+    return(
+      <div>
+        <table style = {{width:'60%',fontSize:'1.6rem',marginTop:'2rem'}} className='border border-dark mx-auto'>
+           <thead>
+          <tr className='fs-3 bg-info fw-bold p-2' >
+            <td>#</td>
+            <td className='col border border-secondary'>Name</td>
+            <td className='col border border-secondary'>Mobile</td>
+            <td className='col border border-secondary'>City</td>
+            </tr>
+            </thead>
+            <tbody>
+        {clients.length > 0 && clients.map((client,index) =><tr key = {client._id} 
+                                                                style = {{fontSize:'1.8rem',padding:'1.2rem',cursor:'pointer'}}
+                                                                onClick= {()=>{    
+                                                                    console.log("Client : ",client)                                                                 
+                                                                      setClientSelected(client)}}
+                                                                >
+                                                      <td className='border border-secondary p-1'>{index+1}</td>
+                                                      <td className='border border-secondary p-1'>{(client.name).toUpperCase()}</td>
+                                                      <td className='border border-secondary p-1'>{client.phoneM}</td>
+                                                      <td className='border border-secondary p-1'>{client.city}</td>
+                                                   </tr>) }
+              </tbody>   
+        </table>
+      </div>
+    )
+  }
+const calculateTotalBill = (jobset) => {  
 
     let totalBill = 0;    
     for(let i =0; i<jobset.length;i++){
        totalBill += jobset[i].total  
-        console.log("Total Bill :",totalBill)
+        
     }       
    
     return totalBill 
@@ -150,7 +206,7 @@ const addTojobs = job => {
     setJobs(newJobs)
     let total = calculateTotalBill(newJobs)
     setValues({...values,orderAmount:total})
-    console.log("NEW JOBS RECEIVED IN ADDTOJOBS",newJobs)
+    // console.log("NEW JOBS RECEIVED IN ADDTOJOBS",newJobs)
     setAddProduct(false)
 }
 
@@ -159,13 +215,13 @@ const addToJobCancel = ()=>{
 
 }
 const editExistingJob = job => {
-    console.log("JOB RECIEVED FOR EDITING :",job)
+    // console.log("JOB RECIEVED FOR EDITING :",job)
     let replaceIndex = jobs.findIndex(j => j.id === job.id)
     let newJobs = [...jobs]
     newJobs[replaceIndex] = {...job}
     setJobs(()=> [...newJobs])  
 
-    console.log("Job recieved in NewOrderForm NEWJOBS********: ",newJobs)
+    // console.log("Job recieved in NewOrderForm NEWJOBS********: ",newJobs)
     let total = calculateTotalBill(newJobs)
     setValues({...values,orderAmount:total})
 }
@@ -184,7 +240,7 @@ const deleteExistingJob = id => {
     }
      else{
         let newJobs = jobs.filter(j => j.id !== id)
-        console.log(`New JOB :::AFTER DELETING ID ${id} `,newJobs)
+        // console.log(`New JOB :::AFTER DELETING ID ${id} `,newJobs)
         setJobs(newJobs)
         let total = calculateTotalBill(newJobs)
         setValues({...values,orderAmount:total})
@@ -235,7 +291,7 @@ const handleOrderSave = ( )=>{
         department,
         invoiceId:'',
         isInvoiced:false,
-        workType,
+        workType:'',
         
   
        
@@ -243,7 +299,7 @@ const handleOrderSave = ( )=>{
    
 if(isUpdate){
 
-    console.log("Order Values  in NewOrderForm UPDATE: ",newValues)
+    // console.log("Order Values  in NewOrderForm UPDATE: ",newValues)
 
 
     newValues._id = orderSelected._id
@@ -258,7 +314,7 @@ if(isUpdate){
           setMessage('Order updated Successfully')
           setAlert(true)
           setTimeout(()=>setAlert(false),2000)
-          setPathRedirect(`${process.env.PUBLIC_URL}/order`)
+          setPathRedirect(`/order`)
           fetchOrders()
           setRedirect(true)
           setClientSelected(null)
@@ -271,10 +327,7 @@ if(isUpdate){
 
         }) 
 }
-else {
- 
-    
-    
+else {  
     
        
          createOrder(user._id,token,newValues)
@@ -288,7 +341,7 @@ else {
                     setMessage('Order Saved Successfully')
                     setAlert(true)
                     setTimeout(()=>setAlert(false),2000)
-                    setPathRedirect(`${process.env.PUBLIC_URL}/order`)
+                    setPathRedirect(`/order`)
                     fetchOrders()
                     setRedirect(true)
                     setClientSelected(null)
@@ -320,7 +373,8 @@ const formHeader = () => {
                                                              <div className = 'col-6 col-md-4 '>Order # : </div>
                                                              <input className = 'col-6 col-md-8' 
                                                                     value = {orderNo}
-                                                                    type = 'number'                                                                    
+                                                                    type = 'number'  
+                                                                    readOnly                                                                  
                                                                     />                                                        
                                                          </div>
                                                         <div className="col-md-1 "></div>
@@ -369,7 +423,7 @@ const formHeader = () => {
                                                              <select id = 'deliverytime'
                                                                      className = 'col col-md-8 ' 
                                                                      value = {deliverytime}
-                                                                     defaultValue={'Evening 4 - 5'}
+                                                                    //  defaultValue={'Evening 4 - 5'}
                                                                      onChange = {handleChange('deliverytime')} >
                                                                   <option value = 'Morning 10 AM'>Morning 10 AM</option>
                                                                   <option value = 'Afternoon 3'>Afternoon 3</option>     
@@ -422,26 +476,26 @@ const formHeader = () => {
                                         <ul>
                                             <li className = "d-flex  flex-column flex-md-row ">
                                                 <div className="col-md-6 d-flex flex-sm-row ">
-                                                     <div className ="col-md-3 col-6">Client</div>
+                                                     <div className ="col-md-3 col-6">Client:</div>
                                                      <div className = "col-md-3 col-6 text-primary ">
                                                              <b>{clientSelected.name}</b></div> 
                                                 </div>
                                                 <div className="col-md-6 d-flex flex-sm-row ">                                                 
-                                                   <div className = "col-md-3 col-6">Balance</div>
-                                                   <div className = "col-md-3 col-6">0</div>
+                                                   <div className = "col-md-3 col-6">Balance:</div>
+                                                   <div className = "col-md-3 col-6">{clientSelected.balance}</div>
                                                    </div>
                                              </li>
                                              
                                              <li className = "d-flex flex-md-row flex-column">
                                                  <div className="col-md-6 d-flex flex-sm-row ">
-                                                       <div className ="col-md-3 col-6" >Price Band</div>
-                                                       <div className ="col-md-3 col-6">{priceBand}</div>
+                                                       <div className ="col-md-3 col-6" >Price Band:</div>
+                                                       <div className ="col-md-3 col-6">{clientSelected.priceBand}</div>
                                                    </div>
                                               </li>
  
                                             <li className = "d-flex flex-md-row flex-column">
                                                     <div  className = "col-md-3 col-6">Bill To : </div>
-                                                    <div className = 'col-md-3 col-6'>{billTo}</div>
+                                                    <div className = 'col-md-3 col-6'>{clientSelected.billTo}</div>
                                             </li>
                                             <li className = "d-flex flex-md-row">
                                                      <div  className = "col-md-auto col-6">Notes : </div>
@@ -498,7 +552,7 @@ const formFooter = () => {
                 <select     id = 'deliveryMehtod'
                             type = 'text' 
                             value = {deliveryMethod}
-                            defaultValue={'Doctor pickup'}
+                            // defaultValue={'Doctor pickup'}
                             onChange = {handleChange('deliveryMethod')} 
                             >
                         
@@ -512,7 +566,7 @@ const formFooter = () => {
             <div className = 'mx-2' >
                 <div>Status</div>
                 <select  value = {status}
-                         defaultValue={'New'}
+                        //  defaultValue={'New'}
                          onChange = {handleChange('status')}>
                     <option value = 'New' >New</option>
                     <option value = 'In Production'>In Production</option>
@@ -799,8 +853,8 @@ const orderForm = () =>{
                { jobs.length > 0 && <div className = 'my-1'>{orderTabs()}</div>}
              </div>
             { clientSelected  &&  <div className  = ''>
-                                   
                                    {formHeader()} 
+                                   
                                    <div className="">
                                         <div className="d-flex flex-column flex-md-row justify-content-between">
                                             
@@ -823,7 +877,8 @@ const orderForm = () =>{
                                             </>
                                             }
                                             </div> 
-                                            { (jobs.length<=0 || addProduct) &&  <Teethselector     onAddOrderCancel = {addToJobCancel} 
+                                            { (jobs.length<=0 || addProduct) &&  <Teethselector       job ={jobs}
+                                                                                                      onAddOrderCancel = {addToJobCancel} 
                                                                                                        onJobSave = {addTojobs}                                                                                               
                                                                                                        onEditJob = {editExistingJob}
                                                         />   } 
@@ -838,6 +893,7 @@ const orderForm = () =>{
                        <span className = 'text-danger fs-4'>
                            <strong>Select Client to create New Order</strong></span>
                                       <ClientOrderTable  onClientSelection = {onClientSelect}/>
+                                       {/* {renderTable()} */}
                                  </div>
            }   
          {!addProduct && orderActionButtons()}
@@ -867,7 +923,7 @@ const getOrderSequence = async () => {
         .then(data => {          
             
             setOrderNumber(convertToSequnceString(data.sequence_val))  
-           
+            
 
         })
         .catch(err => {
@@ -877,7 +933,9 @@ const getOrderSequence = async () => {
         })
 }
 
-
+useEffect(()=>{
+   fetchClients()
+},[])
 
 useEffect(()=>{
    if(orderSelected){
@@ -890,14 +948,17 @@ useEffect(()=>{
        setValues({...orderSelected})
      
    }
-   else{
-        getOrderSequence()      
+   else if(clientSelected){
 
+        // fetchClients()
+        console.log("Client Selected :",clientSelected)
+        getOrderSequence()   
         setValues({...values,orderNo:orderNumber})
         setIsUpdate(false)
-
    }
-
+   else {
+       fetchClients()
+   }
 },[orderNumber])
 
 
